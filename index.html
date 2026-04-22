@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#f5f0e8" />
+<title>Lexicon — A Quiet Dictionary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --card: #fffdf7;
+    --text: #2c1a0e;
+    --text-soft: #5a4636;
+    --muted: #8a7863;
+    --accent: #b5651d;        /* muted terracotta */
+    --accent-soft: #d98a4a;
+    --accent-ghost: rgba(181, 101, 29, 0.08);
+    --olive: #7a8450;
+    --border: rgba(44, 26, 14, 0.08);
+    --shadow-sm: 0 1px 2px rgba(44, 26, 14, 0.04), 0 2px 6px rgba(44, 26, 14, 0.04);
+    --shadow-md: 0 4px 12px rgba(44, 26, 14, 0.06), 0 2px 4px rgba(44, 26, 14, 0.04);
+    --shadow-lg: 0 10px 30px rgba(44, 26, 14, 0.10), 0 4px 8px rgba(44, 26, 14, 0.04);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  html { background: var(--bg); }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+    line-height: 1.6;
+    font-size: 17px;
+    padding-bottom: 80px;
+  }
+
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input { font-family: inherit; }
+
+  .app {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+  }
+
+  /* Header — editorial masthead */
+  .header {
+    text-align: center;
+    margin-bottom: 26px;
+    padding-top: 4px;
+  }
+  .masthead-rule {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .masthead-rule .line {
+    flex: 0 1 60px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+  .masthead-rule .ornament {
+    font-size: 12px;
+    opacity: 0.9;
+    letter-spacing: 2px;
+  }
+  .logo {
+    font-family: 'Playfair Display', 'Lora', Georgia, serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 44px;
+    letter-spacing: 1px;
+    color: var(--text);
+    margin: 0;
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .logo .by {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+  }
+  .logo .by .name {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .masthead-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 500;
+  }
+  .masthead-meta .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--muted);
+    opacity: 0.6;
+  }
+  .tagline {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-soft);
+    font-style: italic;
+    font-family: 'Lora', serif;
+    letter-spacing: 0.2px;
+  }
+
+  /* Back button */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px 8px 10px;
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 14px;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  .back-btn:active {
+    transform: scale(0.96);
+    color: var(--accent);
+    background: var(--accent-ghost);
+  }
+  .back-btn svg { width: 16px; height: 16px; }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: var(--card);
+    border-radius: 999px;
+    padding: 4px;
+    box-shadow: var(--shadow-sm);
+    margin: 18px auto 22px;
+    width: fit-content;
+    gap: 2px;
+  }
+  .tab {
+    padding: 9px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-soft);
+    transition: all 0.25s ease;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(181,101,29,0.25);
+  }
+
+  /* Search */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 16px 50px 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 17px;
+    color: var(--text);
+    outline: none;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+    font-family: 'Lora', serif;
+  }
+  .search-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-ghost), var(--shadow-md);
+  }
+  .search-input::placeholder { color: var(--muted); font-style: italic; }
+  .search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+  .search-btn:active { background: var(--accent-soft); }
+  .search-btn svg { width: 18px; height: 18px; }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.35s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Section heading */
+  .section-title {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-title .clear {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+  }
+  .section-title .clear:active { color: var(--accent); }
+
+  /* History chips */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    background: var(--card);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: var(--text-soft);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    font-family: 'Lora', serif;
+  }
+  .chip:active { background: var(--accent-ghost); color: var(--accent); }
+
+  /* Empty state */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+  }
+  .empty-icon { font-size: 48px; margin-bottom: 8px; opacity: 0.6; }
+  .empty-text {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 15px;
+  }
+
+  /* Word card */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 16px;
+    animation: slideUp 0.4s ease;
+  }
+  .word-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .word-title {
+    font-family: 'Lora', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+  .word-phonetic {
+    color: var(--accent);
+    font-size: 15px;
+    font-style: italic;
+    margin-top: 4px;
+    font-family: 'Lora', serif;
+  }
+  .icon-row {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--accent-ghost);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .icon-btn:active { transform: scale(0.9); background: rgba(181,101,29,0.18); }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn.saved {
+    background: #e85d7a;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(232, 93, 122, 0.35);
+  }
+  .icon-btn.saved svg { fill: currentColor; }
+  .icon-btn.bookmarked {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(181, 101, 29, 0.3);
+  }
+  .icon-btn.bookmarked svg { fill: currentColor; }
+  .icon-btn.heart-pop { animation: heartPop 0.5s ease; }
+  @keyframes heartPop {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.35); }
+    50%  { transform: scale(0.92); }
+    100% { transform: scale(1); }
+  }
+
+  /* Confetti */
+  .confetti {
+    position: fixed;
+    pointer-events: none;
+    border-radius: 2px;
+    z-index: 9999;
+    animation: confetti-fly 1.1s cubic-bezier(0.22, 0.68, 0.45, 1) forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes confetti-fly {
+    0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    70%  { opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+  }
+  .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .icon-btn.playing { animation: pulse 1s ease infinite; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .meaning { margin-top: 4px; }
+
+  /* POS Tabs inside card */
+  .pos-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 20px 0 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pos-tab {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    background: transparent;
+  }
+  .pos-tab:active { transform: scale(0.96); }
+  .pos-tab.active {
+    background: var(--accent-ghost);
+    color: var(--accent);
+  }
+  .pos-tab .count {
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-size: 11px;
+    margin-left: 4px;
+    opacity: 0.7;
+    font-weight: 500;
+  }
+
+  .pos-panel { display: none; animation: fadeIn 0.25s ease; }
+  .pos-panel.active { display: block; }
+
+  .def-item.hidden-extra { display: none; }
+  .def-item.hidden-extra.revealed {
+    display: list-item;
+    animation: fadeIn 0.3s ease;
+  }
+  .show-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: var(--accent-ghost);
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+  }
+  .show-more-btn:active {
+    transform: scale(0.96);
+    background: rgba(181,101,29,0.14);
+  }
+  .show-more-btn svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.25s ease;
+  }
+  .show-more-btn.expanded svg { transform: rotate(180deg); }
+
+  .def-list { list-style: none; padding: 0; margin: 0; }
+  .def-item {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .def-item:last-child { border-bottom: none; }
+  .def-text {
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .def-num {
+    color: var(--muted);
+    font-weight: 500;
+    margin-right: 8px;
+    font-family: 'Lora', serif;
+  }
+  .tags-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 12px 0 6px;
+    font-weight: 600;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--accent-ghost);
+    color: var(--accent);
+    font-family: 'Lora', serif;
+    transition: all 0.2s ease;
+  }
+  .tag.antonym {
+    background: rgba(122, 132, 80, 0.12);
+    color: var(--olive);
+  }
+  .tag:active { transform: scale(0.95); }
+
+  /* Loading — hand-drawn doodle */
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 44px 20px;
+    gap: 18px;
+  }
+  .doodle-loader {
+    width: 130px;
+    height: 58px;
+    position: relative;
+  }
+  .doodle-loader svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .doodle-loader .ink-line {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+    animation: inkWrite 1.8s ease-in-out infinite;
+  }
+  .doodle-loader .ink-line.l2 { animation-delay: 0.25s; stroke: var(--accent-soft); }
+  .doodle-loader .ink-line.l3 { animation-delay: 0.5s; stroke: var(--olive); }
+  .doodle-loader .nib {
+    fill: var(--text);
+    animation: nibBob 1.8s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes inkWrite {
+    0%, 10%   { stroke-dashoffset: 60; }
+    45%       { stroke-dashoffset: 0; }
+    75%, 100% { stroke-dashoffset: -60; }
+  }
+  @keyframes nibBob {
+    0%, 100% { transform: translate(0, 0) rotate(-8deg); }
+    25%      { transform: translate(30px, -2px) rotate(-5deg); }
+    50%      { transform: translate(60px, 0) rotate(-8deg); }
+    75%      { transform: translate(30px, 2px) rotate(-10deg); }
+  }
+
+  /* Spinner still used for inline export loading */
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loader-text {
+    font-family: 'Caveat', 'Lora', cursive;
+    color: var(--text-soft);
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    line-height: 1.1;
+    transform: rotate(-1.5deg);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .loader-text .word {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 28px;
+    position: relative;
+    display: inline-block;
+    animation: wordWobble 2.4s ease-in-out infinite;
+  }
+  .loader-text .word::after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    bottom: 2px;
+    height: 6px;
+    background: var(--accent-ghost);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    z-index: -1;
+    transform: rotate(-0.5deg);
+  }
+  .loader-text .dots {
+    display: inline-block;
+    animation: dotPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes dotPulse {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1; }
+  }
+  @keyframes wordWobble {
+    0%, 100% { transform: rotate(0deg) translateY(0); }
+    25%      { transform: rotate(1deg) translateY(-1px); }
+    75%      { transform: rotate(-1deg) translateY(1px); }
+  }
+
+  /* Error */
+  .error-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 32px 22px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    animation: slideUp 0.4s ease;
+  }
+  .error-icon { font-size: 40px; margin-bottom: 10px; }
+  .error-title {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .error-text { color: var(--muted); font-size: 15px; }
+
+  /* Saved grid */
+  .saved-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .saved-item {
+    background: var(--card);
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+    animation: slideUp 0.3s ease;
+  }
+  .saved-item:active { transform: scale(0.98); box-shadow: var(--shadow-md); }
+  .saved-word {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .saved-remove {
+    color: var(--muted);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+  .saved-remove:active { color: var(--accent); background: var(--accent-ghost); }
+
+  /* Word of the Day */
+  .wotd-card {
+    background: linear-gradient(135deg, #fffdf7 0%, #faf3e4 100%);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.4s ease;
+  }
+  .wotd-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent);
+  }
+  .wotd-label {
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .wotd-label::before {
+    content: '✦';
+    font-size: 13px;
+  }
+  .wotd-word {
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 4px;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+  .wotd-phonetic {
+    color: var(--accent);
+    font-size: 14px;
+    font-style: italic;
+    font-family: 'Lora', serif;
+    margin-bottom: 10px;
+  }
+  .wotd-pos {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--olive);
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .wotd-def {
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.55;
+    font-family: 'Lora', serif;
+  }
+  .wotd-cta {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+  }
+  .wotd-skeleton {
+    height: 16px;
+    background: linear-gradient(90deg, var(--accent-ghost) 25%, rgba(181,101,29,0.04) 50%, var(--accent-ghost) 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    animation: shimmer 1.4s ease infinite;
+    margin: 6px 0;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Word Family */
+  .family {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--border);
+  }
+  .family-title {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .family-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .family-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    transition: all 0.2s ease;
+    min-width: 0;
+  }
+  .family-item:active {
+    transform: scale(0.97);
+    border-color: var(--accent);
+    background: var(--accent-ghost);
+  }
+  .family-word {
+    font-family: 'Lora', serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .family-pos {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--olive);
+  }
+  .family-loading {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* Export button */
+  .export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 6px rgba(181,101,29,0.25);
+    transition: all 0.2s ease;
+  }
+  .export-btn:active { transform: scale(0.96); background: var(--accent-soft); }
+  .export-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .export-btn svg { width: 14px; height: 14px; }
+
+  /* Softer example styling */
+  .example {
+    margin-top: 6px;
+    padding-left: 12px;
+    border-left: 2px solid var(--accent-soft);
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Lora', serif;
+    font-size: 14px;
+    opacity: 0.95;
+    line-height: 1.5;
+  }
+  .example + .example {
+    margin-top: 4px;
+  }
+
+  /* Footer — refined signature */
+  .footer {
+    text-align: center;
+    margin-top: 48px;
+    padding: 24px 0 8px;
+  }
+  .footer-rule {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    color: var(--muted);
+  }
+  .footer-rule .line {
+    flex: 0 1 40px;
+    height: 1px;
+    background: var(--border);
+  }
+  .footer-rule .ornament {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  .footer-sig {
+    font-family: 'Playfair Display', 'Lora', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-bottom: 6px;
+  }
+  .footer-sig .name {
+    color: var(--text);
+    font-weight: 600;
+    font-style: normal;
+    font-family: 'Lora', serif;
+  }
+  .footer-handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--accent-ghost);
+    transition: all 0.2s ease;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+  .footer-handle:active {
+    transform: scale(0.97);
+    background: rgba(181,101,29,0.14);
+  }
+  .footer-handle svg { width: 13px; height: 13px; }
+
+  @media (max-width: 380px) {
+    .app { padding: 18px 16px 32px; }
+    .word-title { font-size: 28px; }
+    .card { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="masthead-rule">
+        <span class="line"></span>
+        <span class="ornament">✦</span>
+        <span class="line"></span>
+      </div>
+      <h1 class="logo">Lexicon<span class="by">by <span class="name">Harsh</span></span></h1>
+      <div class="tagline">a reader's companion, pocket-sized</div>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="search" role="tab">Search</button>
+      <button class="tab" data-tab="saved" role="tab">Favorites</button>
+      <button class="tab" data-tab="bookmarks" role="tab">Saved</button>
+    </nav>
+
+    <!-- Search Panel -->
+    <section class="panel active" id="panel-search">
+      <form class="search-wrap" id="searchForm" autocomplete="off">
+        <input
+          id="searchInput"
+          class="search-input"
+          type="text"
+          placeholder="Look up a word…"
+          spellcheck="false"
+          autocapitalize="off"
+          autocorrect="off"
+        />
+        <button class="search-btn" type="submit" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </form>
+
+      <button class="back-btn" id="backBtn" type="button" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Back
+      </button>
+
+      <div id="resultArea"></div>
+
+      <div id="wotdSection">
+        <div class="section-title">
+          <span>Word of the Day</span>
+        </div>
+        <div id="wotdContainer"></div>
+      </div>
+
+      <div id="historySection">
+        <div class="section-title">
+          <span>Recent</span>
+          <button class="clear" id="clearHistory" type="button">Clear</button>
+        </div>
+        <div class="chips" id="historyChips"></div>
+      </div>
+    </section>
+
+    <!-- Saved Panel -->
+    <section class="panel" id="panel-saved">
+      <div class="section-title">
+        <span>Your Favorites</span>
+        <button class="export-btn" id="exportBtn" type="button" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export CSV
+        </button>
+      </div>
+      <div id="savedArea"></div>
+    </section>
+
+    <!-- Bookmarks Panel -->
+    <section class="panel" id="panel-bookmarks">
+      <div class="section-title">
+        <span>Saved Words</span>
+        <button class="export-btn" id="exportBookmarksBtn" type="button" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export CSV
+        </button>
+      </div>
+      <div id="bookmarksArea"></div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-rule">
+        <span class="line"></span>
+        <span class="ornament">❦</span>
+        <span class="line"></span>
+      </div>
+      <div class="footer-sig">crafted by <span class="name">Harsh</span></div>
+      <a class="footer-handle" href="https://www.instagram.com/harshh__3011/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        harshh__3011
+      </a>
+    </footer>
+  </div>
+
+<script>
+(() => {
+  const API = 'https://api.dictionaryapi.dev/api/v2/entries/en/';
+  const HISTORY_KEY = 'lexicon.history';
+  const SAVED_KEY = 'lexicon.saved';
+  const BOOKMARK_KEY = 'lexicon.bookmarks';
+  const WOTD_KEY = 'lexicon.wotd';
+  const HISTORY_LIMIT = 20;
+
+  const WOTD_POOL = [
+    'serendipity','ephemeral','petrichor','mellifluous','sonder','limerence',
+    'saudade','ineffable','eloquent','quixotic','labyrinthine','ethereal',
+    'halcyon','resplendent','effulgent','nebulous','luminescent','perfunctory',
+    'cacophony','ubiquitous','myriad','sagacious','pellucid','mercurial',
+    'vagary','wanderlust','nostalgia','solitude','reverie','melancholy',
+    'euphoria','tranquil','idyllic','picturesque','exquisite','sublime',
+    'evanescent','sonorous','lucid','aesthete','bucolic','ethereal',
+    'languid','redolent','serene','verdant'
+  ];
+
+  const $ = (s) => document.querySelector(s);
+  const searchForm = $('#searchForm');
+  const searchInput = $('#searchInput');
+  const resultArea = $('#resultArea');
+  const historyChips = $('#historyChips');
+  const historySection = $('#historySection');
+  const wotdSection = $('#wotdSection');
+  const wotdContainer = $('#wotdContainer');
+  const savedArea = $('#savedArea');
+  const bookmarksArea = $('#bookmarksArea');
+  const clearHistoryBtn = $('#clearHistory');
+  const exportBtn = $('#exportBtn');
+  const exportBookmarksBtn = $('#exportBookmarksBtn');
+  const backBtn = $('#backBtn');
+
+  // Simple in-session cache for word existence checks
+  const existenceCache = new Map();
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+
+  let currentAudio = null;
+
+  // Storage helpers
+  const getHistory = () => {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+    catch { return []; }
+  };
+  const setHistory = (arr) => localStorage.setItem(HISTORY_KEY, JSON.stringify(arr));
+  const getSaved = () => {
+    try { return JSON.parse(localStorage.getItem(SAVED_KEY)) || []; }
+    catch { return []; }
+  };
+  const setSaved = (arr) => localStorage.setItem(SAVED_KEY, JSON.stringify(arr));
+
+  const addToHistory = (word) => {
+    word = word.toLowerCase().trim();
+    let h = getHistory().filter(w => w !== word);
+    h.unshift(word);
+    if (h.length > HISTORY_LIMIT) h = h.slice(0, HISTORY_LIMIT);
+    setHistory(h);
+    renderHistory();
+  };
+
+  const toggleSaved = (word) => {
+    word = word.toLowerCase().trim();
+    let s = getSaved();
+    if (s.includes(word)) s = s.filter(w => w !== word);
+    else s.unshift(word);
+    setSaved(s);
+    renderSaved();
+    return s.includes(word);
+  };
+
+  const isSaved = (word) => getSaved().includes(word.toLowerCase().trim());
+
+  const getBookmarks = () => {
+    try { return JSON.parse(localStorage.getItem(BOOKMARK_KEY)) || []; }
+    catch { return []; }
+  };
+  const setBookmarks = (arr) => localStorage.setItem(BOOKMARK_KEY, JSON.stringify(arr));
+
+  const toggleBookmark = (word) => {
+    word = word.toLowerCase().trim();
+    let b = getBookmarks();
+    if (b.includes(word)) b = b.filter(w => w !== word);
+    else b.unshift(word);
+    setBookmarks(b);
+    renderBookmarks();
+    return b.includes(word);
+  };
+
+  const isBookmarked = (word) => getBookmarks().includes(word.toLowerCase().trim());
+
+  // Tabs
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const t = tab.dataset.tab;
+      tabs.forEach(x => x.classList.toggle('active', x === tab));
+      panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + t));
+      if (t === 'saved') renderSaved();
+      if (t === 'bookmarks') renderBookmarks();
+    });
+  });
+
+  // Icons
+  const ICONS = {
+    speaker: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>',
+    bookmarkEmpty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
+    bookmarkFilled: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
+    ribbonEmpty: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>',
+    ribbonFilled: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'
+  };
+
+  // Escape HTML
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]
+  );
+
+  // Search
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const word = searchInput.value.trim();
+    if (!word) return;
+    searchInput.blur();
+    lookup(word);
+  });
+
+  async function lookup(word) {
+    const w = word.toLowerCase().trim();
+    showLoading(w);
+    try {
+      const res = await fetch(API + encodeURIComponent(w));
+      if (!res.ok) {
+        if (res.status === 404) return showError(w, 'notfound');
+        throw new Error('http');
+      }
+      const data = await res.json();
+      if (!Array.isArray(data) || !data.length) return showError(w, 'notfound');
+      addToHistory(w);
+      renderEntry(data, w);
+    } catch (err) {
+      showError(w, 'network');
+    }
+  }
+
+  function hideHome() {
+    historySection.style.display = 'none';
+    if (wotdSection) wotdSection.style.display = 'none';
+    if (backBtn) backBtn.style.display = 'inline-flex';
+  }
+
+  function showHome() {
+    historySection.style.display = '';
+    if (wotdSection) wotdSection.style.display = '';
+    if (backBtn) backBtn.style.display = 'none';
+    resultArea.innerHTML = '';
+    searchInput.value = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (backBtn) backBtn.addEventListener('click', showHome);
+
+  function showLoading(word) {
+    hideHome();
+    resultArea.innerHTML = `
+      <div class="loader">
+        <div class="doodle-loader" aria-hidden="true">
+          <svg viewBox="0 0 130 58" xmlns="http://www.w3.org/2000/svg">
+            <path class="ink-line l1" d="M8 18 Q22 12, 36 18 T66 18" />
+            <path class="ink-line l2" d="M8 32 Q20 26, 32 32 T56 32" />
+            <path class="ink-line l3" d="M8 46 Q24 40, 40 46 T72 46" />
+            <g class="nib">
+              <path d="M72 6 L88 6 L84 22 L76 22 Z" />
+              <circle cx="80" cy="26" r="1.8" fill="var(--accent)" />
+            </g>
+          </svg>
+        </div>
+        <div class="loader-text">
+          <span>searching</span>
+          <span class="word">${esc(word)}</span>
+          <span class="dots">…</span>
+        </div>
+      </div>`;
+  }
+
+  function showError(word, type) {
+    hideHome();
+    const isNotFound = type === 'notfound';
+    resultArea.innerHTML = `
+      <div class="error-card">
+        <div class="error-icon">${isNotFound ? '📖' : '⚠️'}</div>
+        <div class="error-title">${isNotFound ? 'Word not found' : 'Something went wrong'}</div>
+        <div class="error-text">${
+          isNotFound
+            ? `We couldn't find "<strong>${esc(word)}</strong>" in the dictionary. Check the spelling?`
+            : 'Please check your connection and try again.'
+        }</div>
+      </div>`;
+  }
+
+  function pickAudio(entries) {
+    for (const e of entries) {
+      if (Array.isArray(e.phonetics)) {
+        for (const p of e.phonetics) {
+          if (p.audio && p.audio.trim()) return p.audio;
+        }
+      }
+    }
+    return null;
+  }
+
+  function pickPhoneticText(entries) {
+    for (const e of entries) {
+      if (e.phonetic) return e.phonetic;
+      if (Array.isArray(e.phonetics)) {
+        for (const p of e.phonetics) {
+          if (p.text) return p.text;
+        }
+      }
+    }
+    return '';
+  }
+
+  function renderEntry(entries, word) {
+    hideHome();
+    const audioUrl = pickAudio(entries);
+    const phonetic = pickPhoneticText(entries);
+    const saved = isSaved(word);
+    const bookmarked = isBookmarked(word);
+
+    // Group meanings by part of speech (merge across entries + dedupe defs)
+    const posMap = new Map();
+    entries.forEach(e => {
+      (e.meanings || []).forEach(m => {
+        const pos = m.partOfSpeech || 'other';
+        if (!posMap.has(pos)) {
+          posMap.set(pos, { pos, definitions: [], synonyms: [], antonyms: [], seenDefs: new Set() });
+        }
+        const g = posMap.get(pos);
+        (m.definitions || []).forEach(d => {
+          const key = (d.definition || '').trim().toLowerCase();
+          if (!key || g.seenDefs.has(key)) return;
+          g.seenDefs.add(key);
+          g.definitions.push(d);
+        });
+        g.synonyms.push(...(m.synonyms || []));
+        g.antonyms.push(...(m.antonyms || []));
+      });
+    });
+    const posGroups = [...posMap.values()].map(g => ({
+      ...g,
+      synonyms: [...new Set(g.synonyms)],
+      antonyms: [...new Set(g.antonyms)]
+    }));
+
+    const tabsHtml = posGroups.length > 1 ? `
+      <div class="pos-tabs">
+        ${posGroups.map((g, i) => `
+          <button class="pos-tab ${i === 0 ? 'active' : ''}" data-pos-idx="${i}">
+            ${esc(g.pos)}<span class="count">${g.definitions.length}</span>
+          </button>
+        `).join('')}
+      </div>
+    ` : '';
+
+    const DEF_LIMIT = 4;
+
+    const panelsHtml = posGroups.map((g, i) => {
+      const total = g.definitions.length;
+      const defsHtml = g.definitions.map((d, di) => `
+        <li class="def-item ${di >= DEF_LIMIT ? 'hidden-extra' : ''}">
+          <div class="def-text"><span class="def-num">${di + 1}.</span>${esc(d.definition || '')}</div>
+          ${d.example ? `<div class="example">"${esc(d.example)}"</div>` : ''}
+        </li>
+      `).join('');
+
+      const hiddenCount = total - DEF_LIMIT;
+      const showMoreHtml = hiddenCount > 0 ? `
+        <button class="show-more-btn" data-panel="${i}" type="button">
+          <span class="show-more-label">Show ${hiddenCount} more</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+      ` : '';
+
+      const syns = g.synonyms.slice(0, 10);
+      const ants = g.antonyms.slice(0, 10);
+
+      return `
+        <div class="pos-panel ${i === 0 ? 'active' : ''}" data-pos-idx="${i}">
+          ${posGroups.length === 1 ? `<div style="font-family:'Lora',serif;font-style:italic;color:var(--olive);font-size:14px;margin:16px 0 10px;">${esc(g.pos)}</div>` : ''}
+          <ul class="def-list">${defsHtml}</ul>
+          ${showMoreHtml}
+          ${syns.length ? `
+            <div class="tags-label">Synonyms</div>
+            <div class="tags">${syns.map(s => `<button class="tag" data-word="${esc(s)}">${esc(s)}</button>`).join('')}</div>
+          ` : ''}
+          ${ants.length ? `
+            <div class="tags-label">Antonyms</div>
+            <div class="tags">${ants.map(a => `<button class="tag antonym" data-word="${esc(a)}">${esc(a)}</button>`).join('')}</div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
+
+    const meaningsHtml = tabsHtml + `<div class="pos-panels">${panelsHtml}</div>`;
+
+    resultArea.innerHTML = `
+      <article class="card">
+        <div class="word-head">
+          <div>
+            <h2 class="word-title">${esc(entries[0].word || word)}</h2>
+            ${phonetic ? `<div class="word-phonetic">${esc(phonetic)}</div>` : ''}
+          </div>
+          <div class="icon-row">
+            <button class="icon-btn" id="playBtn" aria-label="Play pronunciation" ${audioUrl ? '' : 'disabled'}>
+              ${ICONS.speaker}
+            </button>
+            <button class="icon-btn ${saved ? 'saved' : ''}" id="saveBtn" aria-label="Favorite word">
+              ${saved ? ICONS.bookmarkFilled : ICONS.bookmarkEmpty}
+            </button>
+            <button class="icon-btn ${bookmarked ? 'bookmarked' : ''}" id="bookmarkBtn" aria-label="Save word">
+              ${bookmarked ? ICONS.ribbonFilled : ICONS.ribbonEmpty}
+            </button>
+          </div>
+        </div>
+        ${meaningsHtml}
+        <div class="family" id="familySection">
+          <div class="family-title">Word Family</div>
+          <div class="family-loading">Finding related forms…</div>
+        </div>
+      </article>
+    `;
+
+    // Wire up POS tabs
+    const posTabs = resultArea.querySelectorAll('.pos-tab');
+    const posPanels = resultArea.querySelectorAll('.pos-panel');
+    posTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const idx = tab.dataset.posIdx;
+        posTabs.forEach(t => t.classList.toggle('active', t === tab));
+        posPanels.forEach(p => p.classList.toggle('active', p.dataset.posIdx === idx));
+      });
+    });
+
+    // Wire up show-more buttons
+    resultArea.querySelectorAll('.show-more-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = resultArea.querySelector(`.pos-panel[data-pos-idx="${btn.dataset.panel}"]`);
+        if (!panel) return;
+        const hiddenItems = panel.querySelectorAll('.def-item.hidden-extra');
+        const isExpanded = btn.classList.contains('expanded');
+        if (isExpanded) {
+          hiddenItems.forEach(el => el.classList.remove('revealed'));
+          btn.classList.remove('expanded');
+          btn.querySelector('.show-more-label').textContent = `Show ${hiddenItems.length} more`;
+        } else {
+          hiddenItems.forEach(el => el.classList.add('revealed'));
+          btn.classList.add('expanded');
+          btn.querySelector('.show-more-label').textContent = 'Show less';
+        }
+      });
+    });
+
+    // Kick off word family lookup
+    loadWordFamily(word).catch(() => {});
+
+    // Validate synonyms/antonyms in background — hide ones that don't exist
+    validateTags();
+
+    // Bind audio
+    const playBtn = $('#playBtn');
+    if (audioUrl && playBtn) {
+      playBtn.addEventListener('click', () => playAudio(audioUrl, playBtn));
+    }
+
+    // Bind save
+    const saveBtn = $('#saveBtn');
+    saveBtn.addEventListener('click', () => {
+      const nowSaved = toggleSaved(word);
+      saveBtn.classList.toggle('saved', nowSaved);
+      saveBtn.innerHTML = nowSaved ? ICONS.bookmarkFilled : ICONS.bookmarkEmpty;
+      if (nowSaved) {
+        const rect = saveBtn.getBoundingClientRect();
+        spawnConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        saveBtn.classList.remove('heart-pop');
+        void saveBtn.offsetWidth;
+        saveBtn.classList.add('heart-pop');
+      }
+    });
+
+    // Bind bookmark
+    const bookmarkBtn = $('#bookmarkBtn');
+    bookmarkBtn.addEventListener('click', () => {
+      const nowBookmarked = toggleBookmark(word);
+      bookmarkBtn.classList.toggle('bookmarked', nowBookmarked);
+      bookmarkBtn.innerHTML = nowBookmarked ? ICONS.ribbonFilled : ICONS.ribbonEmpty;
+      if (nowBookmarked) {
+        bookmarkBtn.classList.remove('heart-pop');
+        void bookmarkBtn.offsetWidth;
+        bookmarkBtn.classList.add('heart-pop');
+      }
+    });
+
+    // Bind synonym/antonym tags
+    resultArea.querySelectorAll('.tag').forEach(t => {
+      t.addEventListener('click', () => {
+        const w = t.dataset.word;
+        searchInput.value = w;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        lookup(w);
+      });
+    });
+  }
+
+  // Word Family — generate candidates, verify via API, render
+  function generateFamilyCandidates(word) {
+    const w = word.toLowerCase();
+    const cands = new Set();
+    const endsIn = (s) => w.endsWith(s);
+    const stem = (drop) => w.slice(0, w.length - drop);
+
+    // Base variations
+    cands.add(w + 's');
+    cands.add(w + 'es');
+    cands.add(w + 'ed');
+    cands.add(w + 'ing');
+    cands.add(w + 'ly');
+    cands.add(w + 'er');
+    cands.add(w + 'ers');
+    cands.add(w + 'est');
+    cands.add(w + 'ness');
+    cands.add(w + 'ful');
+    cands.add(w + 'less');
+    cands.add(w + 'able');
+    cands.add(w + 'ish');
+    cands.add(w + 'ly');
+
+    // Ends in 'e' → drop e for -ing, -ed, -able, -ation
+    if (endsIn('e') && w.length > 2) {
+      const s = stem(1);
+      cands.add(s + 'ing');
+      cands.add(s + 'ed');
+      cands.add(s + 'able');
+      cands.add(s + 'ation');
+      cands.add(s + 'ion');
+    }
+
+    // Ends in 'y' → replace y with i for -es, -ed, -ly, -ness
+    if (endsIn('y') && w.length > 2 && !'aeiou'.includes(w[w.length - 2])) {
+      const s = stem(1);
+      cands.add(s + 'ies');
+      cands.add(s + 'ied');
+      cands.add(s + 'ily');
+      cands.add(s + 'iness');
+      cands.add(s + 'ier');
+      cands.add(s + 'iest');
+    }
+
+    // CVC doubling for -ing, -ed, -er
+    if (w.length >= 3) {
+      const last = w[w.length - 1];
+      const mid = w[w.length - 2];
+      const first = w[w.length - 3];
+      const isV = (c) => 'aeiou'.includes(c);
+      if (!isV(last) && isV(mid) && !isV(first) && !'wxy'.includes(last)) {
+        const doubled = w + last;
+        cands.add(doubled + 'ing');
+        cands.add(doubled + 'ed');
+        cands.add(doubled + 'er');
+      }
+    }
+
+    // -ion → -ional, -ionally; -tion → drop
+    if (endsIn('tion')) {
+      cands.add(stem(4) + 'tional');
+      cands.add(stem(4) + 'tionally');
+      cands.add(stem(3) + 'te');
+      cands.add(stem(3) + 'ted');
+      cands.add(stem(3) + 'ting');
+    }
+
+    // -ate → -ation, -ative
+    if (endsIn('ate') && w.length > 4) {
+      const s = stem(3);
+      cands.add(s + 'ation');
+      cands.add(s + 'ative');
+    }
+
+    // -ic → -ical, -ically
+    if (endsIn('ic') && w.length > 3) {
+      cands.add(w + 'al');
+      cands.add(w + 'ally');
+    }
+
+    // -ly (adverb) → base
+    if (endsIn('ly') && w.length > 4) {
+      cands.add(stem(2));
+    }
+    // -ing / -ed → base
+    if (endsIn('ing') && w.length > 5) {
+      cands.add(stem(3));
+      cands.add(stem(3) + 'e');
+    }
+    if (endsIn('ed') && w.length > 4) {
+      cands.add(stem(2));
+      cands.add(stem(2) + 'e');
+    }
+
+    cands.delete(w);
+    // Limit & lowercase, keep reasonable length
+    return [...cands].filter(c => c.length >= 3 && c.length <= 20).slice(0, 24);
+  }
+
+  async function checkWord(w) {
+    if (existenceCache.has(w)) return existenceCache.get(w);
+    try {
+      const res = await fetch(API + encodeURIComponent(w));
+      if (!res.ok) { existenceCache.set(w, null); return null; }
+      const data = await res.json();
+      if (!Array.isArray(data) || !data.length) { existenceCache.set(w, null); return null; }
+      const posSet = new Set();
+      for (const entry of data) {
+        for (const m of (entry.meanings || [])) {
+          if (m.partOfSpeech) posSet.add(m.partOfSpeech);
+        }
+      }
+      const out = { word: w, pos: [...posSet] };
+      existenceCache.set(w, out);
+      return out;
+    } catch {
+      return null;
+    }
+  }
+
+  async function validateTags() {
+    const tagEls = resultArea.querySelectorAll('.tag[data-word]');
+    if (!tagEls.length) return;
+    const groups = new Map();
+    tagEls.forEach(el => {
+      const w = el.dataset.word.toLowerCase().trim();
+      if (!groups.has(w)) groups.set(w, []);
+      groups.get(w).push(el);
+    });
+    const unique = [...groups.keys()];
+    const chunkSize = 8;
+    for (let i = 0; i < unique.length; i += chunkSize) {
+      const chunk = unique.slice(i, i + chunkSize);
+      const results = await Promise.all(chunk.map(checkWord));
+      results.forEach((r, idx) => {
+        const w = chunk[idx];
+        if (!r) {
+          groups.get(w).forEach(el => {
+            el.style.transition = 'all 0.3s ease';
+            el.style.opacity = '0';
+            el.style.transform = 'scale(0.8)';
+            setTimeout(() => el.remove(), 300);
+          });
+        }
+      });
+    }
+    // Hide empty tag groups after filtering
+    setTimeout(() => {
+      resultArea.querySelectorAll('.tags').forEach(group => {
+        if (!group.querySelector('.tag')) {
+          const label = group.previousElementSibling;
+          if (label && label.classList.contains('tags-label')) label.remove();
+          group.remove();
+        }
+      });
+    }, 400);
+  }
+
+  async function loadWordFamily(word) {
+    const section = $('#familySection');
+    if (!section) return;
+    const candidates = generateFamilyCandidates(word);
+
+    // Batch parallel requests (chunks of 6 to avoid hammering)
+    const found = [];
+    const seenWords = new Set([word.toLowerCase()]);
+    const chunkSize = 6;
+    for (let i = 0; i < candidates.length; i += chunkSize) {
+      const chunk = candidates.slice(i, i + chunkSize);
+      const results = await Promise.all(chunk.map(checkWord));
+      for (const r of results) {
+        if (r && !seenWords.has(r.word)) {
+          seenWords.add(r.word);
+          found.push(r);
+        }
+      }
+      if (found.length >= 10) break;
+    }
+
+    if (!found.length) {
+      section.innerHTML = `
+        <div class="family-title">Word Family</div>
+        <div class="family-loading">No related forms found.</div>
+      `;
+      return;
+    }
+
+    // Sort by POS priority
+    const posOrder = { noun: 1, verb: 2, adjective: 3, adverb: 4 };
+    found.sort((a, b) => {
+      const ap = Math.min(...a.pos.map(p => posOrder[p] || 99));
+      const bp = Math.min(...b.pos.map(p => posOrder[p] || 99));
+      return ap - bp;
+    });
+
+    section.innerHTML = `
+      <div class="family-title">Word Family</div>
+      <div class="family-list">
+        ${found.map(f => `
+          <button class="family-item" data-word="${esc(f.word)}">
+            <span class="family-word">${esc(f.word)}</span>
+            <span class="family-pos">${esc(f.pos.join(', ') || '—')}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+    section.querySelectorAll('.family-item').forEach(b => {
+      b.addEventListener('click', () => {
+        const w = b.dataset.word;
+        searchInput.value = w;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        lookup(w);
+      });
+    });
+  }
+
+  // Word of the Day
+  function todayKey() {
+    const d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+  }
+
+  function pickWotd() {
+    // Deterministic-ish: hash today's date to index
+    const key = todayKey();
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+    return WOTD_POOL[hash % WOTD_POOL.length];
+  }
+
+  async function loadWotd() {
+    if (!wotdContainer) return;
+    let cached = null;
+    try { cached = JSON.parse(localStorage.getItem(WOTD_KEY)); } catch {}
+    const today = todayKey();
+
+    if (cached && cached.date === today && cached.data) {
+      renderWotd(cached.data);
+      return;
+    }
+
+    const word = pickWotd();
+    wotdContainer.innerHTML = `
+      <div class="wotd-card">
+        <div class="wotd-label">Word of the Day</div>
+        <div class="wotd-skeleton" style="width:55%;height:24px;"></div>
+        <div class="wotd-skeleton" style="width:30%;"></div>
+        <div class="wotd-skeleton" style="width:85%;margin-top:10px;"></div>
+        <div class="wotd-skeleton" style="width:70%;"></div>
+      </div>
+    `;
+
+    try {
+      const res = await fetch(API + encodeURIComponent(word));
+      if (!res.ok) throw new Error('wotd fail');
+      const data = await res.json();
+      if (!Array.isArray(data) || !data.length) throw new Error('empty');
+      const entry = data[0];
+      const phonetic = pickPhoneticText(data) || '';
+      const meaning = (entry.meanings || [])[0] || {};
+      const def = (meaning.definitions || [])[0] || {};
+      const payload = {
+        word: entry.word || word,
+        phonetic,
+        pos: meaning.partOfSpeech || '',
+        definition: def.definition || ''
+      };
+      localStorage.setItem(WOTD_KEY, JSON.stringify({ date: today, data: payload }));
+      renderWotd(payload);
+    } catch {
+      // Fallback — just show the word
+      const payload = { word, phonetic: '', pos: '', definition: 'Tap to explore this word.' };
+      renderWotd(payload);
+    }
+  }
+
+  function renderWotd(data) {
+    wotdContainer.innerHTML = `
+      <div class="wotd-card" role="button" tabindex="0">
+        <div class="wotd-label">Word of the Day</div>
+        <h3 class="wotd-word">${esc(data.word)}</h3>
+        ${data.phonetic ? `<div class="wotd-phonetic">${esc(data.phonetic)}</div>` : ''}
+        ${data.pos ? `<div class="wotd-pos">${esc(data.pos)}</div>` : ''}
+        <div class="wotd-def">${esc(data.definition || '')}</div>
+        <div class="wotd-cta">Tap to explore →</div>
+      </div>
+    `;
+    const card = wotdContainer.querySelector('.wotd-card');
+    if (card) {
+      card.addEventListener('click', () => {
+        searchInput.value = data.word;
+        lookup(data.word);
+      });
+    }
+  }
+
+  // CSV export
+  function csvEscape(v) {
+    if (v == null) return '';
+    const s = String(v);
+    if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  async function exportSavedAsCsv() {
+    const saved = getSaved();
+    if (!saved.length) return;
+    const originalText = exportBtn.innerHTML;
+    exportBtn.disabled = true;
+    exportBtn.innerHTML = `<div class="spinner" style="width:14px;height:14px;border-width:2px;"></div> Fetching…`;
+
+    const rows = [['Word', 'Phonetic', 'Part of Speech', 'Definition']];
+
+    // Sequential with small concurrency
+    const fetchOne = async (word) => {
+      try {
+        const res = await fetch(API + encodeURIComponent(word));
+        if (!res.ok) return [word, '', '', '(not found)'];
+        const data = await res.json();
+        if (!Array.isArray(data) || !data.length) return [word, '', '', '(not found)'];
+        const phonetic = pickPhoneticText(data) || '';
+        const meaning = (data[0].meanings || [])[0] || {};
+        const def = ((meaning.definitions || [])[0] || {}).definition || '';
+        return [data[0].word || word, phonetic, meaning.partOfSpeech || '', def];
+      } catch {
+        return [word, '', '', '(error)'];
+      }
+    };
+
+    // Chunk in parallel groups of 4
+    for (let i = 0; i < saved.length; i += 4) {
+      const chunk = saved.slice(i, i + 4);
+      const results = await Promise.all(chunk.map(fetchOne));
+      results.forEach(r => rows.push(r));
+    }
+
+    const csv = rows.map(r => r.map(csvEscape).join(',')).join('\r\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'lexicon-saved-words.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    exportBtn.disabled = false;
+    exportBtn.innerHTML = originalText;
+  }
+
+  if (exportBtn) exportBtn.addEventListener('click', exportSavedAsCsv);
+
+  async function exportBookmarksAsCsv() {
+    const bookmarks = getBookmarks();
+    if (!bookmarks.length) return;
+    const originalText = exportBookmarksBtn.innerHTML;
+    exportBookmarksBtn.disabled = true;
+    exportBookmarksBtn.innerHTML = `<div class="spinner" style="width:14px;height:14px;border-width:2px;"></div> Fetching…`;
+
+    const rows = [['Word', 'Phonetic', 'Part of Speech', 'Definition']];
+    const fetchOne = async (word) => {
+      try {
+        const res = await fetch(API + encodeURIComponent(word));
+        if (!res.ok) return [word, '', '', '(not found)'];
+        const data = await res.json();
+        if (!Array.isArray(data) || !data.length) return [word, '', '', '(not found)'];
+        const phonetic = pickPhoneticText(data) || '';
+        const meaning = (data[0].meanings || [])[0] || {};
+        const def = ((meaning.definitions || [])[0] || {}).definition || '';
+        return [data[0].word || word, phonetic, meaning.partOfSpeech || '', def];
+      } catch {
+        return [word, '', '', '(error)'];
+      }
+    };
+
+    for (let i = 0; i < bookmarks.length; i += 4) {
+      const chunk = bookmarks.slice(i, i + 4);
+      const results = await Promise.all(chunk.map(fetchOne));
+      results.forEach(r => rows.push(r));
+    }
+
+    const csv = rows.map(r => r.map(csvEscape).join(',')).join('\r\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'lexicon-saved-words.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    exportBookmarksBtn.disabled = false;
+    exportBookmarksBtn.innerHTML = originalText;
+  }
+
+  if (exportBookmarksBtn) exportBookmarksBtn.addEventListener('click', exportBookmarksAsCsv);
+
+  function renderBookmarks() {
+    const b = getBookmarks();
+    if (exportBookmarksBtn) exportBookmarksBtn.style.display = b.length ? 'inline-flex' : 'none';
+    if (!b.length) {
+      bookmarksArea.innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">📑</div>
+          <div class="empty-text">No saved words yet.<br/>Tap the ribbon to save a word for later.</div>
+        </div>`;
+      return;
+    }
+    bookmarksArea.innerHTML = `<div class="saved-list">${
+      b.map(w => `
+        <div class="saved-item" data-word="${esc(w)}">
+          <div class="saved-word">${esc(w)}</div>
+          <button class="saved-remove" data-remove="${esc(w)}" aria-label="Remove">${ICONS.close}</button>
+        </div>
+      `).join('')
+    }</div>`;
+
+    bookmarksArea.querySelectorAll('.saved-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (e.target.closest('.saved-remove')) return;
+        const w = item.dataset.word;
+        tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === 'search'));
+        panels.forEach(p => p.classList.toggle('active', p.id === 'panel-search'));
+        searchInput.value = w;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        lookup(w);
+      });
+    });
+
+    bookmarksArea.querySelectorAll('.saved-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const w = btn.dataset.remove;
+        toggleBookmark(w);
+      });
+    });
+  }
+
+  // Confetti burst — spawned from (x, y) in viewport coords
+  function spawnConfetti(x, y) {
+    const colors = ['#e85d7a', '#f5a524', '#b5651d', '#d98a4a', '#7a8450', '#f5c16c', '#c77b7b'];
+    const shapes = ['square', 'circle', 'rect'];
+    const count = 28;
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < count; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti';
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const shape = shapes[Math.floor(Math.random() * shapes.length)];
+      const size = 5 + Math.random() * 7;
+      piece.style.background = color;
+      piece.style.left = x + 'px';
+      piece.style.top = y + 'px';
+      if (shape === 'circle') {
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+        piece.style.borderRadius = '50%';
+      } else if (shape === 'rect') {
+        piece.style.width = (size + 3) + 'px';
+        piece.style.height = size * 0.45 + 'px';
+        piece.style.borderRadius = '1px';
+      } else {
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+      }
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+      const speed = 90 + Math.random() * 110;
+      const dx = Math.cos(angle) * speed;
+      const dy = Math.sin(angle) * speed - 40 + Math.random() * 180;
+      const rot = (Math.random() - 0.5) * 720;
+      piece.style.setProperty('--dx', dx + 'px');
+      piece.style.setProperty('--dy', dy + 'px');
+      piece.style.setProperty('--rot', rot + 'deg');
+      piece.style.animationDelay = (Math.random() * 0.08) + 's';
+      frag.appendChild(piece);
+      setTimeout(() => piece.remove(), 1300);
+    }
+    document.body.appendChild(frag);
+  }
+
+  function playAudio(url, btn) {
+    try {
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      const a = new Audio(url.startsWith('//') ? 'https:' + url : url);
+      currentAudio = a;
+      btn.classList.add('playing');
+      a.play().catch(() => btn.classList.remove('playing'));
+      a.addEventListener('ended', () => btn.classList.remove('playing'));
+      a.addEventListener('error', () => btn.classList.remove('playing'));
+    } catch {
+      btn.classList.remove('playing');
+    }
+  }
+
+  // History rendering
+  function renderHistory() {
+    const h = getHistory();
+    if (!h.length) {
+      historyChips.innerHTML = '<div class="empty-text" style="color:var(--muted);font-size:13px;">No recent searches yet.</div>';
+      return;
+    }
+    historyChips.innerHTML = h.map(w =>
+      `<button class="chip" data-word="${esc(w)}">${esc(w)}</button>`
+    ).join('');
+    historyChips.querySelectorAll('.chip').forEach(c => {
+      c.addEventListener('click', () => {
+        const w = c.dataset.word;
+        searchInput.value = w;
+        lookup(w);
+      });
+    });
+  }
+
+  clearHistoryBtn.addEventListener('click', () => {
+    setHistory([]);
+    renderHistory();
+  });
+
+  // Saved rendering
+  function renderSaved() {
+    const s = getSaved();
+    if (exportBtn) exportBtn.style.display = s.length ? 'inline-flex' : 'none';
+    if (!s.length) {
+      savedArea.innerHTML = `
+        <div class="empty">
+          <div class="empty-icon">🔖</div>
+          <div class="empty-text">No saved words yet.<br/>Bookmark a word to keep it here.</div>
+        </div>`;
+      return;
+    }
+    savedArea.innerHTML = `<div class="saved-list">${
+      s.map(w => `
+        <div class="saved-item" data-word="${esc(w)}">
+          <div class="saved-word">${esc(w)}</div>
+          <button class="saved-remove" data-remove="${esc(w)}" aria-label="Remove">${ICONS.close}</button>
+        </div>
+      `).join('')
+    }</div>`;
+
+    savedArea.querySelectorAll('.saved-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (e.target.closest('.saved-remove')) return;
+        const w = item.dataset.word;
+        // Switch to search tab and look up
+        tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === 'search'));
+        panels.forEach(p => p.classList.toggle('active', p.id === 'panel-search'));
+        searchInput.value = w;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        lookup(w);
+      });
+    });
+
+    savedArea.querySelectorAll('.saved-remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const w = btn.dataset.remove;
+        toggleSaved(w);
+      });
+    });
+  }
+
+  // Init
+  renderHistory();
+  renderSaved();
+  renderBookmarks();
+  loadWotd();
+})();
+</script>
+</body>
+</html>
