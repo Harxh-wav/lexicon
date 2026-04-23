@@ -32,7 +32,7 @@
   }
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; max-width: 100%; }
   html { background: var(--bg); }
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -201,19 +201,23 @@
     width: fit-content;
     gap: 2px;
   }
+  .tabs {
+    max-width: 100%;
+  }
   .tab {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 10px 20px;
+    gap: 5px;
+    padding: 7px 14px;
     border-radius: 999px;
-    font-size: 14px;
+    font-size: 12.5px;
     font-weight: 500;
     color: var(--text-soft);
     transition: all 0.25s ease;
     font-family: 'Inter', sans-serif;
+    white-space: nowrap;
   }
-  .tab svg { width: 16px; height: 16px; }
+  .tab svg { width: 13px; height: 13px; }
   .tab.active {
     background: var(--accent);
     color: #fff;
@@ -321,7 +325,10 @@
 
   /* Panels */
   .panel { display: none; }
-  .panel.active { display: block; animation: fadeIn 0.35s ease; }
+  .panel.active { display: block; }
+  .panel.panel-enter { animation: panelIn 0.4s cubic-bezier(0.22, 0.68, 0.35, 1); }
+  .panel.panel-enter-right { animation: panelInRight 0.4s cubic-bezier(0.22, 0.68, 0.35, 1); }
+  .panel.panel-enter-left { animation: panelInLeft 0.4s cubic-bezier(0.22, 0.68, 0.35, 1); }
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(6px); }
@@ -331,6 +338,21 @@
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.99); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes panelInRight {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes panelInLeft {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Tab pill slide indicator */
+  .tab { position: relative; }
 
   /* Section heading */
   .section-title {
@@ -774,19 +796,21 @@
   }
   .wotd-illustration {
     position: absolute;
-    right: -10px;
+    right: -20px;
     top: 0;
-    width: 260px;
+    width: 45%;
+    max-width: 220px;
     height: 100%;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.28;
     z-index: 0;
+    -webkit-mask-image: linear-gradient(to left, #000 60%, transparent 100%);
+    mask-image: linear-gradient(to left, #000 60%, transparent 100%);
   }
   .wotd-illustration svg { width: 100%; height: 100%; }
   .wotd-content {
     position: relative;
     z-index: 1;
-    max-width: 62%;
   }
   .wotd-label {
     display: inline-flex;
@@ -1028,30 +1052,35 @@
     margin-top: 28px;
     background: var(--sage);
     border-radius: var(--radius);
-    padding: 24px;
+    padding: 22px 20px;
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     animation: slideUp 0.4s ease;
     min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   .vocab-cta-inner {
-    max-width: 58%;
+    width: 60%;
+    max-width: 60%;
     position: relative;
     z-index: 1;
   }
   .vocab-cta-title {
     font-family: 'Playfair Display', 'Lora', serif;
     font-weight: 700;
-    font-size: 22px;
+    font-size: 20px;
     color: var(--text);
     margin: 0 0 6px;
     letter-spacing: -0.2px;
+    line-height: 1.2;
   }
   .vocab-cta-sub {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-soft);
     line-height: 1.5;
-    margin-bottom: 16px;
+    margin: 0 0 14px;
     font-family: 'Inter', sans-serif;
   }
   .vocab-cta-btn {
@@ -1071,23 +1100,24 @@
   .vocab-cta-btn:active { transform: scale(0.96); background: var(--accent-soft); }
   .vocab-plant-bg {
     position: absolute;
-    right: 20px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     background: rgba(218, 212, 190, 0.6);
     z-index: 0;
   }
   .vocab-plant {
     position: absolute;
-    right: 8px;
-    bottom: 0;
-    width: 130px;
-    height: 130px;
+    right: 10px;
+    bottom: 10px;
+    width: 115px;
+    height: 115px;
     pointer-events: none;
     opacity: 0.95;
+    z-index: 1;
   }
   .vocab-plant svg { width: 100%; height: 100%; }
 
@@ -1234,12 +1264,36 @@
   }
   .cooking-ok:active { transform: scale(0.96); background: var(--accent-soft); }
 
-  @media (max-width: 380px) {
-    .app { padding: 18px 16px 32px; }
+  @media (max-width: 420px) {
+    .app { padding: 16px 14px 32px; }
+    .logo { font-size: 44px; }
+    .logo .by { font-size: 16px; }
+    .tagline { font-size: 14px; }
+    .tab { padding: 6px 10px; font-size: 11.5px; gap: 4px; }
+    .tab svg { width: 12px; height: 12px; }
+    .tabs { padding: 4px; }
     .word-title { font-size: 28px; }
     .card { padding: 18px; }
-    .vocab-plant { width: 110px; height: 110px; }
-    .vocab-cta-inner { max-width: 58%; }
+    .wotd-card { padding: 20px; }
+    .wotd-content { max-width: 70%; }
+    .wotd-illustration { width: 42%; opacity: 0.22; }
+    .wotd-word { font-size: 30px; }
+    .vocab-cta { padding: 18px 16px; min-height: 140px; }
+    .vocab-cta-title { font-size: 18px; }
+    .vocab-cta-sub { font-size: 12.5px; }
+    .vocab-cta-inner { width: 62%; max-width: 62%; }
+    .vocab-plant { width: 100px; height: 100px; right: 6px; bottom: 8px; }
+    .vocab-plant-bg { width: 115px; height: 115px; right: 2px; }
+    .search-input { padding: 15px 54px 15px 46px; font-size: 16px; }
+    .search-icon-left { left: 18px; }
+    .search-icon-left svg { width: 18px; height: 18px; }
+    .search-btn { width: 40px; height: 40px; }
+  }
+  @media (max-width: 340px) {
+    .logo { font-size: 38px; }
+    .tab { padding: 6px 8px; font-size: 11px; }
+    .wotd-illustration { display: none; }
+    .wotd-content { max-width: 100%; }
   }
 </style>
 </head>
@@ -1333,7 +1387,7 @@
         <div class="vocab-plant-bg" aria-hidden="true"></div>
         <div class="vocab-cta-inner">
           <h3 class="vocab-cta-title">Build your vocabulary</h3>
-          <p class="vocab-cta-sub">Save words, explore meanings,<br/>and grow every day.</p>
+          <p class="vocab-cta-sub">Save words, explore meanings, and grow every day.</p>
           <button class="vocab-cta-btn" id="signupBtn" type="button">Create a free account</button>
         </div>
         <div class="vocab-plant" aria-hidden="true">
@@ -1537,11 +1591,24 @@
   const isBookmarked = (word) => getBookmarks().includes(word.toLowerCase().trim());
 
   // Tabs
+  const tabOrder = ['search', 'saved', 'bookmarks'];
+  let currentTab = 'search';
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       const t = tab.dataset.tab;
+      if (t === currentTab) return;
+      const dir = tabOrder.indexOf(t) > tabOrder.indexOf(currentTab) ? 'right' : 'left';
+      currentTab = t;
       tabs.forEach(x => x.classList.toggle('active', x === tab));
-      panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + t));
+      panels.forEach(p => {
+        p.classList.remove('panel-enter', 'panel-enter-right', 'panel-enter-left');
+        const isActive = p.id === 'panel-' + t;
+        p.classList.toggle('active', isActive);
+        if (isActive) {
+          void p.offsetWidth;
+          p.classList.add(dir === 'right' ? 'panel-enter-right' : 'panel-enter-left');
+        }
+      });
       if (t === 'saved') renderSaved();
       if (t === 'bookmarks') renderBookmarks();
     });
