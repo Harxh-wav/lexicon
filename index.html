@@ -37,7 +37,7 @@
     min-height: 100vh;
     line-height: 1.6;
     font-size: 17px;
-    padding-bottom: 80px;
+    padding-bottom: 96px;
   }
 
   button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
@@ -49,12 +49,44 @@
     padding: 24px 20px 40px;
   }
 
+  /* Top bar — hamburger + profile */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 2px 10px;
+  }
+  .top-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-soft);
+    transition: all 0.2s ease;
+  }
+  .top-btn:active { transform: scale(0.92); background: var(--accent-ghost); color: var(--accent); }
+  .top-btn svg { width: 22px; height: 22px; }
+  .top-btn.profile {
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    box-shadow: var(--shadow-sm);
+  }
+
   /* Header — editorial masthead */
   .header {
     text-align: center;
     margin-bottom: 26px;
-    padding-top: 4px;
+    padding-top: 0;
   }
+  .crown-ornament {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4px;
+    color: var(--accent);
+  }
+  .crown-ornament svg { width: 38px; height: 30px; }
   .masthead-rule {
     display: flex;
     align-items: center;
@@ -872,20 +904,233 @@
   }
   .footer-handle svg { width: 13px; height: 13px; }
 
+  /* Build your vocabulary CTA */
+  .vocab-cta {
+    position: relative;
+    margin-top: 28px;
+    background: linear-gradient(135deg, #efe9dc 0%, #e6ddc9 100%);
+    border-radius: var(--radius);
+    padding: 22px 22px 22px 22px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    animation: slideUp 0.4s ease;
+  }
+  .vocab-cta-inner {
+    max-width: 62%;
+    position: relative;
+    z-index: 1;
+  }
+  .vocab-cta-title {
+    font-family: 'Lora', serif;
+    font-weight: 700;
+    font-size: 19px;
+    color: var(--text);
+    margin: 0 0 4px;
+  }
+  .vocab-cta-sub {
+    font-size: 13.5px;
+    color: var(--text-soft);
+    line-height: 1.5;
+    margin-bottom: 14px;
+    font-family: 'Lora', serif;
+  }
+  .vocab-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--text);
+    color: #fff;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 6px rgba(44, 26, 14, 0.2);
+    transition: all 0.2s ease;
+  }
+  .vocab-cta-btn:active { transform: scale(0.96); background: #3d2613; }
+  .vocab-plant {
+    position: absolute;
+    right: 8px;
+    bottom: 0;
+    width: 130px;
+    height: 130px;
+    pointer-events: none;
+    opacity: 0.95;
+  }
+  .vocab-plant svg { width: 100%; height: 100%; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 12px rgba(44, 26, 14, 0.05);
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+  .bottom-nav-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 20px;
+  }
+  .nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 4px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.2s ease;
+    position: relative;
+  }
+  .nav-btn svg { width: 22px; height: 22px; }
+  .nav-btn.active { color: var(--text); }
+  .nav-btn.active .nav-icon {
+    background: var(--text);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(44, 26, 14, 0.25);
+  }
+  .nav-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+  }
+  .nav-btn:active .nav-icon { transform: scale(0.9); }
+
+  /* Cooking overlay */
+  .cooking-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(44, 26, 14, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.25s ease;
+  }
+  .cooking-overlay.show { display: flex; }
+  .cooking-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 32px 26px 28px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    animation: slideUp 0.35s ease;
+  }
+  .cooking-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .cooking-close:active { background: var(--accent-ghost); color: var(--accent); }
+  .cooking-close svg { width: 16px; height: 16px; }
+  .cooking-doodle {
+    width: 160px;
+    height: 130px;
+    margin: 0 auto 10px;
+  }
+  .cooking-doodle svg { width: 100%; height: 100%; overflow: visible; }
+  .cooking-doodle .wiggle { animation: potWiggle 2.2s ease-in-out infinite; transform-origin: center bottom; }
+  .cooking-doodle .steam { animation: steamRise 2.4s ease-in-out infinite; opacity: 0; }
+  .cooking-doodle .steam.s2 { animation-delay: 0.6s; }
+  .cooking-doodle .steam.s3 { animation-delay: 1.2s; }
+  @keyframes potWiggle {
+    0%, 100% { transform: rotate(-1.5deg); }
+    50%      { transform: rotate(1.5deg); }
+  }
+  @keyframes steamRise {
+    0%   { transform: translateY(0); opacity: 0; }
+    25%  { opacity: 0.8; }
+    100% { transform: translateY(-32px); opacity: 0; }
+  }
+  .cooking-title {
+    font-family: 'Caveat', 'Lora', cursive;
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 6px 0 4px;
+    line-height: 1.05;
+    transform: rotate(-1deg);
+  }
+  .cooking-sub {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0 0 18px;
+  }
+  .cooking-ok {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 8px rgba(181, 101, 29, 0.3);
+    transition: all 0.2s ease;
+  }
+  .cooking-ok:active { transform: scale(0.96); background: var(--accent-soft); }
+
   @media (max-width: 380px) {
     .app { padding: 18px 16px 32px; }
     .word-title { font-size: 28px; }
     .card { padding: 18px; }
+    .vocab-plant { width: 110px; height: 110px; }
+    .vocab-cta-inner { max-width: 58%; }
   }
 </style>
 </head>
 <body>
   <div class="app">
+    <div class="top-bar">
+      <button class="top-btn" id="menuBtn" aria-label="Menu" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>
+      </button>
+      <button class="top-btn profile" id="profileBtn" aria-label="Account" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="3.4"/><path d="M5 20c1.2-3.4 4-5 7-5s5.8 1.6 7 5"/></svg>
+      </button>
+    </div>
+
     <header class="header">
-      <div class="masthead-rule">
-        <span class="line"></span>
-        <span class="ornament">✦</span>
-        <span class="line"></span>
+      <div class="crown-ornament" aria-hidden="true">
+        <svg viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4 C20 4, 17 10, 13 12 C17 13, 20 17, 20 17 C20 17, 23 13, 27 12 C23 10, 20 4, 20 4 Z" fill="currentColor" opacity="0.95"/>
+          <path d="M10 14 C10 14, 8 19, 5 22 C9 21, 13 22, 13 22 C13 22, 12 18, 10 14 Z" fill="currentColor" opacity="0.75"/>
+          <path d="M30 14 C30 14, 32 19, 35 22 C31 21, 27 22, 27 22 C27 22, 28 18, 30 14 Z" fill="currentColor" opacity="0.75"/>
+          <path d="M8 26 Q20 22, 32 26" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
+        </svg>
       </div>
       <h1 class="logo">Lexicon<span class="by">by <span class="name">Harsh</span></span></h1>
       <div class="tagline">a reader's companion, pocket-sized</div>
@@ -938,6 +1183,24 @@
         </div>
         <div class="chips" id="historyChips"></div>
       </div>
+
+      <div id="vocabCta" class="vocab-cta">
+        <div class="vocab-cta-inner">
+          <h3 class="vocab-cta-title">Build your vocabulary</h3>
+          <p class="vocab-cta-sub">Save words, explore meanings, and grow every day.</p>
+          <button class="vocab-cta-btn" id="signupBtn" type="button">Create a free account</button>
+        </div>
+        <div class="vocab-plant" aria-hidden="true">
+          <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2c1a0e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M70 78 C70 60, 56 50, 46 46 C50 58, 58 68, 70 78 Z" fill="#7a8450" stroke="#4f5633"/>
+            <path d="M70 80 C70 58, 84 48, 96 44 C92 58, 84 70, 70 80 Z" fill="#9ba66a" stroke="#4f5633"/>
+            <path d="M70 86 C70 70, 72 58, 74 48" stroke="#4f5633" stroke-width="1.4"/>
+            <path d="M58 100 L52 132 L92 132 L86 100 Z" fill="#d9b88a" stroke="#7a5a36"/>
+            <path d="M54 100 L90 100" stroke="#7a5a36" stroke-width="1.4"/>
+            <ellipse cx="72" cy="100" rx="18" ry="3" fill="#a0825a" stroke="none" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
     </section>
 
     <!-- Saved Panel -->
@@ -976,6 +1239,59 @@
         harshh__3011
       </a>
     </footer>
+  </div>
+
+  <nav class="bottom-nav" aria-label="Primary">
+    <div class="bottom-nav-inner">
+      <button class="nav-btn" id="navHome" type="button">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
+        </div>
+        <span>Home</span>
+      </button>
+      <button class="nav-btn active" id="navDictionary" type="button">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M8 7h8M8 11h6"/></svg>
+        </div>
+        <span>Dictionary</span>
+      </button>
+      <button class="nav-btn" id="navExplore" type="button">
+        <div class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5 13 13l-4.5 2.5L11 11z"/></svg>
+        </div>
+        <span>Explore</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="cooking-overlay" id="cookingOverlay" role="dialog" aria-modal="true" aria-labelledby="cookingTitle">
+    <div class="cooking-card">
+      <button class="cooking-close" id="cookingClose" aria-label="Close" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="cooking-doodle" aria-hidden="true">
+        <svg viewBox="0 0 160 130" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#2c1a0e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path class="steam s1" d="M62 38 C58 32, 66 28, 62 22 C58 16, 66 12, 62 6" stroke="#b5651d" stroke-width="2"/>
+          <path class="steam s2" d="M82 38 C78 32, 86 28, 82 22 C78 16, 86 12, 82 6" stroke="#b5651d" stroke-width="2"/>
+          <path class="steam s3" d="M102 38 C98 32, 106 28, 102 22 C98 16, 106 12, 102 6" stroke="#b5651d" stroke-width="2"/>
+          <g class="wiggle">
+            <path d="M28 58 L132 58 L124 108 Q122 114, 114 114 L46 114 Q38 114, 36 108 Z" fill="#fffdf7"/>
+            <path d="M22 54 Q80 48, 138 54 Q138 62, 132 62 L28 62 Q22 62, 22 54 Z" fill="#d9b88a" stroke="#7a5a36"/>
+            <ellipse cx="80" cy="54" rx="56" ry="4" fill="#a0825a" stroke="none" opacity="0.5"/>
+            <circle cx="20" cy="78" r="6" fill="#fffdf7"/>
+            <circle cx="140" cy="78" r="6" fill="#fffdf7"/>
+            <path d="M46 80 Q52 76, 58 82 Q64 76, 70 82" stroke="#b5651d"/>
+            <circle cx="90" cy="90" r="2.5" fill="#b5651d" stroke="none"/>
+            <circle cx="108" cy="84" r="2" fill="#7a8450" stroke="none"/>
+            <path d="M54 100 Q60 96, 66 100" stroke="#7a8450"/>
+          </g>
+          <path d="M18 122 L142 122" stroke="#8a7863" stroke-width="1.4" opacity="0.5" stroke-dasharray="3 4"/>
+        </svg>
+      </div>
+      <h3 class="cooking-title" id="cookingTitle">Wait — we're cooking this!</h3>
+      <p class="cooking-sub">This feature is simmering in the kitchen. Check back soon.</p>
+      <button class="cooking-ok" id="cookingOk" type="button">Got it</button>
+    </div>
   </div>
 
 <script>
@@ -1955,6 +2271,52 @@
       });
     });
   }
+
+  // Cooking overlay — shown for unfinished features
+  const cookingOverlay = document.getElementById('cookingOverlay');
+  const showCooking = () => {
+    cookingOverlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  };
+  const hideCooking = () => {
+    cookingOverlay.classList.remove('show');
+    document.body.style.overflow = '';
+  };
+  document.getElementById('menuBtn').addEventListener('click', showCooking);
+  document.getElementById('profileBtn').addEventListener('click', showCooking);
+  const signupBtn = document.getElementById('signupBtn');
+  if (signupBtn) signupBtn.addEventListener('click', showCooking);
+  document.getElementById('cookingClose').addEventListener('click', hideCooking);
+  document.getElementById('cookingOk').addEventListener('click', hideCooking);
+  cookingOverlay.addEventListener('click', (e) => {
+    if (e.target === cookingOverlay) hideCooking();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cookingOverlay.classList.contains('show')) hideCooking();
+  });
+
+  // Bottom nav
+  const navHome = document.getElementById('navHome');
+  const navDictionary = document.getElementById('navDictionary');
+  const navExplore = document.getElementById('navExplore');
+  const setActiveNav = (btn) => {
+    [navHome, navDictionary, navExplore].forEach(b => b.classList.toggle('active', b === btn));
+  };
+  navHome.addEventListener('click', () => {
+    setActiveNav(navHome);
+    tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === 'search'));
+    panels.forEach(p => p.classList.toggle('active', p.id === 'panel-search'));
+    showHome();
+  });
+  navDictionary.addEventListener('click', () => {
+    setActiveNav(navDictionary);
+    tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === 'search'));
+    panels.forEach(p => p.classList.toggle('active', p.id === 'panel-search'));
+    setTimeout(() => searchInput.focus(), 100);
+  });
+  navExplore.addEventListener('click', () => {
+    showCooking();
+  });
 
   // Init
   renderHistory();
