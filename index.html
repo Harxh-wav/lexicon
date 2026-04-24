@@ -53,7 +53,43 @@
     margin: 0 auto;
     padding: 84px 20px 40px;
   }
-  #wotdSection { margin-top: 80px; }
+  #wotdSection { margin-top: 20px; }
+  .welcome-block {
+    margin: 56px 0 4px;
+    animation: slideUp 0.5s ease;
+  }
+  .welcome-eyebrow {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .welcome-greet {
+    font-family: 'Playfair Display', 'Lora', serif;
+    font-weight: 700;
+    font-size: 44px;
+    color: var(--text);
+    margin: 0;
+    line-height: 1;
+    letter-spacing: 0.3px;
+    background: linear-gradient(180deg, var(--text) 0%, var(--accent) 160%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .welcome-greet .welcome-dot { color: var(--gold); -webkit-text-fill-color: var(--gold); }
+  .welcome-sub {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--muted);
+    margin: 10px 0 0;
+    line-height: 1.4;
+  }
 
   /* Top bar — profile + compact Lexicon on the right */
   .top-bar {
@@ -304,9 +340,6 @@
     font-family: 'Lora', serif;
     backdrop-filter: blur(22px) saturate(1.5);
     -webkit-backdrop-filter: blur(22px) saturate(1.5);
-  }
-  .dock-search:focus-within .search-input {
-    animation: pillMorph 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .search-input:focus {
     background: rgba(255, 255, 255, 0.65);
@@ -1450,13 +1483,6 @@
   <div class="app">
     <div class="top-bar">
       <div class="mini-masthead">
-        <div class="crown-ornament-mini" aria-hidden="true">
-          <svg viewBox="0 0 40 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 4 C20 4, 17 10, 13 12 C17 13, 20 17, 20 17 C20 17, 23 13, 27 12 C23 10, 20 4, 20 4 Z" fill="currentColor" opacity="0.95"/>
-            <path d="M10 14 C10 14, 8 19, 5 22 C9 21, 13 22, 13 22 C13 22, 12 18, 10 14 Z" fill="currentColor" opacity="0.75"/>
-            <path d="M30 14 C30 14, 32 19, 35 22 C31 21, 27 22, 27 22 C27 22, 28 18, 30 14 Z" fill="currentColor" opacity="0.75"/>
-          </svg>
-        </div>
         <div class="mini-title">
           <h1 class="mini-logo">Lexicon</h1>
           <span class="mini-by">by Harsh</span>
@@ -1471,6 +1497,11 @@
     <section class="panel active" id="panel-search">
       <div id="resultArea"></div>
 
+      <div class="welcome-block">
+        <span class="welcome-eyebrow">Hello, wordsmith</span>
+        <h2 class="welcome-greet">Welcome<span class="welcome-dot">.</span></h2>
+        <p class="welcome-sub">A quiet place to find the right word.</p>
+      </div>
       <div id="wotdSection">
         <div id="wotdContainer"></div>
       </div>
