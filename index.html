@@ -7,7 +7,7 @@
 <title>Lexicon — A Quiet Dictionary</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..600,0..100&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg: #f3efe7;
@@ -43,6 +43,28 @@
     line-height: 1.6;
     font-size: 17px;
     padding-bottom: 156px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11", "calt", "kern";
+  }
+  /* Fraunces gets contextual alternates, ligatures, and old-style numerals
+     in body, lining figures in display */
+  .word-title, .pos-tab, .pos-label-inline, .word-phonetic,
+  .entry-eyebrow {
+    font-feature-settings: "ss01", "calt", "liga", "kern";
+  }
+  .def-text, .example, .tag, .family-word, .family-pos {
+    font-feature-settings: "calt", "liga", "onum", "kern";
+  }
+  .word-title {
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+  .def-text {
+    font-variation-settings: "opsz" 14, "SOFT" 50;
+  }
+  .word-phonetic, .pos-label-inline, .pos-tab, .example, .tag {
+    font-variation-settings: "opsz" 14, "SOFT" 80;
   }
 
   button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
@@ -51,7 +73,7 @@
   .app {
     max-width: 640px;
     margin: 0 auto;
-    padding: 84px 20px 40px;
+    padding: 0 20px 40px;
   }
   #wotdSection { margin-top: 20px; }
   .welcome-block {
@@ -69,21 +91,33 @@
     margin-bottom: 8px;
   }
   .welcome-greet {
-    font-family: 'Playfair Display', 'Lora', serif;
-    font-weight: 700;
+    font-family: 'Fraunces', 'Lora', serif;
+    font-weight: 600;
     font-size: 44px;
     color: var(--text);
     margin: 0;
     line-height: 1;
-    letter-spacing: 0.3px;
-    background: linear-gradient(180deg, var(--text) 0%, var(--accent) 160%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
-  .welcome-greet .welcome-dot { color: var(--gold); -webkit-text-fill-color: var(--gold); }
+  .welcome-wave {
+    display: inline-block;
+    font-size: 0.9em;
+    transform-origin: 70% 80%;
+    animation: wave 2.4s ease-in-out 0.4s 2;
+  }
+  @keyframes wave {
+    0%, 60%, 100% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+  }
   .welcome-sub {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     font-size: 15px;
     color: var(--muted);
@@ -93,7 +127,7 @@
 
   /* Top bar — profile + compact Lexicon on the right */
   .top-bar {
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;
@@ -102,12 +136,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px max(20px, calc((100% - 640px) / 2 + 20px));
+    margin: 0 calc(-1 * max(20px, calc((100% - 640px) / 2 + 20px)));
     gap: 12px;
-    background: rgba(243, 239, 231, 0.92);
-    border-bottom: 1px solid rgba(45, 61, 44, 0.08);
-    backdrop-filter: blur(22px) saturate(1.6);
-    -webkit-backdrop-filter: blur(22px) saturate(1.6);
-    box-shadow: 0 4px 16px rgba(30, 42, 30, 0.04);
+    background: var(--bg);
+    border-bottom: 1px solid rgba(45, 61, 44, 0.1);
+    box-shadow: 0 4px 16px rgba(30, 42, 30, 0.06);
   }
   .top-btn {
     width: 40px;
@@ -147,7 +180,7 @@
     min-width: 0;
   }
   .mini-logo {
-    font-family: 'Playfair Display', 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-weight: 700;
     font-size: 26px;
     color: var(--text);
@@ -156,7 +189,7 @@
     line-height: 1;
   }
   .mini-by {
-    font-family: 'Playfair Display', 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     font-size: 12px;
     color: var(--gold);
@@ -185,7 +218,7 @@
     letter-spacing: 2px;
   }
   .logo {
-    font-family: 'Playfair Display', 'Lora', Georgia, serif;
+    font-family: 'Fraunces', 'Lora', Georgia, serif;
     font-weight: 700;
     font-style: normal;
     font-size: 56px;
@@ -199,7 +232,7 @@
     gap: 4px;
   }
   .logo .by {
-    font-family: 'Playfair Display', 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     font-weight: 500;
     font-size: 20px;
@@ -235,7 +268,7 @@
     font-size: 16px;
     color: var(--text-soft);
     font-style: normal;
-    font-family: 'Lora', 'Playfair Display', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     letter-spacing: 0.1px;
   }
   .crown-ornament { color: var(--gold); }
@@ -333,13 +366,14 @@
       inset 0 1px 1px rgba(255, 255, 255, 0.85),
       inset 0 -1px 1px rgba(30, 42, 30, 0.04);
     transition:
-      background 0.35s ease,
-      border-color 0.35s ease,
-      box-shadow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-      transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    font-family: 'Lora', serif;
+      background 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+    font-family: 'Fraunces', 'Lora', serif;
     backdrop-filter: blur(22px) saturate(1.5);
     -webkit-backdrop-filter: blur(22px) saturate(1.5);
+    transform: translateZ(0);
+    will-change: auto;
   }
   .search-input:focus {
     background: rgba(255, 255, 255, 0.65);
@@ -492,7 +526,7 @@
     gap: 12px;
     padding: 12px 20px;
     cursor: pointer;
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-size: 16px;
     color: var(--text);
     border-bottom: 1px solid var(--border);
@@ -550,7 +584,7 @@
 
   /* Section heading */
   .section-title {
-    font-family: 'Playfair Display', 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-size: 22px;
     font-weight: 700;
     margin: 28px 0 14px;
@@ -604,7 +638,7 @@
       0 1px 3px rgba(30, 42, 30, 0.05),
       inset 0 1px 1px rgba(255, 255, 255, 0.85);
     transition: all 0.2s ease;
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -621,73 +655,93 @@
   }
   .empty-icon { font-size: 48px; margin-bottom: 8px; opacity: 0.6; }
   .empty-text {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     font-size: 15px;
   }
 
-  /* Word card */
+  /* Word card — editorial */
   .card {
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.65);
     backdrop-filter: blur(22px) saturate(1.5);
     -webkit-backdrop-filter: blur(22px) saturate(1.5);
     border-radius: var(--radius);
-    padding: 22px;
+    padding: 36px 38px 32px;
     box-shadow:
-      0 12px 36px rgba(30, 42, 30, 0.12),
-      0 2px 8px rgba(30, 42, 30, 0.06),
+      0 14px 44px rgba(30, 42, 30, 0.10),
+      0 1px 2px rgba(30, 42, 30, 0.04),
       inset 0 1px 1px rgba(255, 255, 255, 0.85);
     margin-bottom: 16px;
     animation: slideUp 0.4s ease;
+    position: relative;
+  }
+  .entry-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: var(--olive);
+    font-weight: 600;
+    margin-bottom: 18px;
+    opacity: 0.75;
   }
   .word-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 8px;
+    display: block;
+    margin-bottom: 0;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
   }
   .word-title {
-    font-family: 'Lora', serif;
-    font-size: 32px;
-    font-weight: 600;
+    font-family: 'Fraunces', 'Lora', serif;
+    font-size: clamp(38px, 11vw, 60px);
+    font-weight: 500;
     color: var(--text);
     margin: 0;
-    line-height: 1.2;
-    word-break: break-word;
+    line-height: 1.02;
+    letter-spacing: -0.6px;
+    overflow-wrap: normal;
+    word-break: keep-all;
+    hyphens: none;
+  }
+  .word-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 14px;
+    flex-wrap: wrap;
   }
   .word-phonetic {
-    color: var(--accent);
-    font-size: 15px;
+    color: var(--olive);
+    font-size: 16px;
     font-style: italic;
-    margin-top: 4px;
-    font-family: 'Lora', serif;
+    margin-top: 0;
+    font-family: 'Fraunces', 'Lora', serif;
+    letter-spacing: 0.3px;
   }
   .icon-row {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     flex-shrink: 0;
+    padding-bottom: 0;
+    margin-left: auto;
   }
   .icon-btn {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(16px) saturate(1.5);
-    -webkit-backdrop-filter: blur(16px) saturate(1.5);
-    box-shadow:
-      0 4px 14px rgba(30, 42, 30, 0.1),
-      inset 0 1px 1px rgba(255, 255, 255, 0.85);
-    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-soft);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
   }
-  .icon-btn:active { transform: scale(0.9); background: rgba(181,101,29,0.18); }
-  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn:hover { background: var(--accent-ghost); color: var(--accent); border-color: transparent; }
+  .icon-btn:active { transform: scale(0.9); background: var(--accent-ghost); }
+  .icon-btn svg { width: 16px; height: 16px; }
   .icon-btn.saved {
     background: #e85d7a;
     color: #fff;
@@ -732,38 +786,40 @@
 
   .meaning { margin-top: 4px; }
 
-  /* POS Tabs inside card */
+  /* POS Tabs inside card — editorial underline */
   .pos-tabs {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin: 20px 0 14px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
+    gap: 22px;
+    margin: 26px 0 4px;
   }
   .pos-tab {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
-    font-size: 14px;
+    font-size: 15px;
     color: var(--muted);
-    padding: 6px 14px;
-    border-radius: 999px;
+    padding: 6px 0 10px;
+    border-radius: 0;
     transition: all 0.2s ease;
     font-weight: 500;
     background: transparent;
+    border-bottom: 2px solid transparent;
+    position: relative;
   }
-  .pos-tab:active { transform: scale(0.96); }
+  .pos-tab:active { transform: translateY(1px); }
   .pos-tab.active {
-    background: var(--accent-ghost);
     color: var(--accent);
+    border-bottom-color: var(--accent);
   }
   .pos-tab .count {
     font-family: 'Inter', sans-serif;
     font-style: normal;
-    font-size: 11px;
-    margin-left: 4px;
+    font-size: 10px;
+    margin-left: 6px;
     opacity: 0.7;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    vertical-align: 2px;
   }
 
   .pos-panel { display: none; animation: fadeIn 0.25s ease; }
@@ -799,46 +855,76 @@
   }
   .show-more-btn.expanded svg { transform: rotate(180deg); }
 
-  .def-list { list-style: none; padding: 0; margin: 0; }
+  .pos-label-inline {
+    font-family: 'Fraunces', 'Lora', serif;
+    font-style: italic;
+    color: var(--olive);
+    font-size: 15px;
+    margin: 22px 0 6px;
+    letter-spacing: 0.3px;
+  }
+
+  .def-list { list-style: none; padding: 0; margin: 18px 0 0; }
   .def-item {
-    padding: 10px 0;
-    border-bottom: 1px dashed var(--border);
+    padding: 18px 0 18px 56px;
+    border-bottom: none;
+    position: relative;
+  }
+  .def-item + .def-item {
+    border-top: 1px solid var(--border);
   }
   .def-item:last-child { border-bottom: none; }
   .def-text {
     color: var(--text);
-    font-size: 16px;
-    line-height: 1.55;
+    font-family: 'Fraunces', 'Lora', serif;
+    font-size: 18px;
+    line-height: 1.65;
+    font-weight: 400;
   }
   .def-num {
-    color: var(--muted);
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 40px;
+    color: var(--accent);
     font-weight: 500;
-    margin-right: 8px;
-    font-family: 'Lora', serif;
+    font-style: italic;
+    font-family: 'Fraunces', 'Lora', serif;
+    font-size: 28px;
+    line-height: 1;
+    margin-right: 0;
+    opacity: 0.55;
   }
   .tags-label {
-    font-size: 12px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 12px 0 6px;
-    font-weight: 600;
-  }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag {
-    font-size: 13px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--accent-ghost);
-    color: var(--accent);
-    font-family: 'Lora', serif;
-    transition: all 0.2s ease;
-  }
-  .tag.antonym {
-    background: rgba(122, 132, 80, 0.12);
+    font-size: 10px;
     color: var(--olive);
+    text-transform: uppercase;
+    letter-spacing: 2.4px;
+    margin: 22px 0 10px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
   }
-  .tag:active { transform: scale(0.95); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 14px;
+    padding: 4px 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--accent);
+    font-family: 'Fraunces', 'Lora', serif;
+    font-style: italic;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid var(--accent-ghost);
+    margin-right: 14px;
+  }
+  .tag:hover { border-bottom-color: var(--accent); }
+  .tag.antonym {
+    background: transparent;
+    color: var(--olive);
+    border-bottom-color: rgba(122, 132, 80, 0.2);
+  }
+  .tag.antonym:hover { border-bottom-color: var(--olive); }
+  .tag:active { transform: translateY(1px); }
 
   /* Loading — hand-drawn doodle */
   .loader {
@@ -955,7 +1041,7 @@
   }
   .error-icon { font-size: 40px; margin-bottom: 10px; }
   .error-title {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 6px;
@@ -988,7 +1074,7 @@
   }
   .saved-item:active { transform: scale(0.98); box-shadow: var(--shadow-md); }
   .saved-word {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-size: 18px;
     font-weight: 500;
     color: var(--text);
@@ -1064,7 +1150,7 @@
   }
   .wotd-label .star-badge svg { width: 16px; height: 16px; fill: currentColor; }
   .wotd-word {
-    font-family: 'Playfair Display', 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-size: 38px;
     font-weight: 700;
     color: var(--text);
@@ -1077,7 +1163,7 @@
     color: var(--gold);
     font-size: 18px;
     font-style: italic;
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     margin-bottom: 12px;
   }
   .wotd-pos {
@@ -1164,19 +1250,19 @@
     background: var(--accent-ghost);
   }
   .family-word {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-weight: 500;
     font-size: 15px;
     color: var(--text);
   }
   .family-pos {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     font-size: 11px;
     color: var(--olive);
   }
   .family-loading {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     color: var(--muted);
     font-size: 13px;
@@ -1201,17 +1287,17 @@
   .export-btn:disabled { opacity: 0.6; cursor: not-allowed; }
   .export-btn svg { width: 14px; height: 14px; }
 
-  /* Softer example styling */
+  /* Softer example styling — pull-quote */
   .example {
-    margin-top: 6px;
-    padding-left: 12px;
-    border-left: 2px solid var(--accent-soft);
-    color: var(--muted);
+    margin-top: 12px;
+    padding: 2px 0 2px 16px;
+    border-left: 2px solid var(--accent-ghost);
+    color: var(--text-soft);
     font-style: italic;
-    font-family: 'Lora', serif;
-    font-size: 14px;
-    opacity: 0.95;
-    line-height: 1.5;
+    font-family: 'Fraunces', 'Lora', serif;
+    font-size: 15px;
+    opacity: 0.9;
+    line-height: 1.6;
   }
   .example + .example {
     margin-top: 4px;
@@ -1241,7 +1327,7 @@
     opacity: 0.7;
   }
   .footer-sig {
-    font-family: 'Playfair Display', 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     font-size: 14px;
     color: var(--text-soft);
@@ -1251,7 +1337,7 @@
     color: var(--text);
     font-weight: 600;
     font-style: normal;
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
   }
   .footer-handle {
     display: inline-flex;
@@ -1302,7 +1388,7 @@
     z-index: 1;
   }
   .vocab-cta-title {
-    font-family: 'Playfair Display', 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-weight: 700;
     font-size: 20px;
     color: var(--text);
@@ -1427,7 +1513,7 @@
     transform: rotate(-1deg);
   }
   .cooking-sub {
-    font-family: 'Lora', serif;
+    font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     color: var(--text-soft);
     font-size: 15px;
@@ -1456,8 +1542,11 @@
     .tab { padding: 6px 10px; font-size: 11.5px; gap: 4px; }
     .tab svg { width: 12px; height: 12px; }
     .tabs { padding: 4px; }
-    .word-title { font-size: 28px; }
-    .card { padding: 18px; }
+    .card { padding: 24px 22px 22px; }
+    .def-item { padding: 16px 0 16px 44px; }
+    .def-text { font-size: 17px; }
+    .def-num { font-size: 24px; width: 34px; top: 14px; }
+    .pos-tabs { gap: 16px; }
     .wotd-card { padding: 20px; }
     .wotd-content { max-width: 70%; }
     .wotd-illustration { width: 42%; opacity: 0.22; }
@@ -1498,9 +1587,7 @@
       <div id="resultArea"></div>
 
       <div class="welcome-block">
-        <span class="welcome-eyebrow">Hello, wordsmith</span>
-        <h2 class="welcome-greet">Welcome<span class="welcome-dot">.</span></h2>
-        <p class="welcome-sub">A quiet place to find the right word.</p>
+        <h2 class="welcome-greet">Hello <span class="welcome-wave" aria-hidden="true">👋</span></h2>
       </div>
       <div id="wotdSection">
         <div id="wotdContainer"></div>
@@ -1856,10 +1943,8 @@
   }
 
   searchInput.addEventListener('input', () => {
-    const q = searchInput.value.trim().toLowerCase();
     clearTimeout(sugDebounceTimer);
-    if (q.length < 2) { hideSuggestions(); return; }
-    sugDebounceTimer = setTimeout(() => fetchSuggestions(q), 180);
+    hideSuggestions();
   });
 
   searchInput.addEventListener('keydown', (e) => {
@@ -1911,17 +1996,22 @@
     }
   }
 
+  const welcomeBlock = document.querySelector('.welcome-block');
+
   function hideHome() {
     historySection.style.display = 'none';
     if (wotdSection) wotdSection.style.display = 'none';
+    if (welcomeBlock) welcomeBlock.style.display = 'none';
     const vocab = document.getElementById('vocabCta');
     if (vocab) vocab.style.display = 'none';
     if (dockSearch) dockSearch.classList.add('has-result');
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
   function showHome() {
     historySection.style.display = '';
     if (wotdSection) wotdSection.style.display = '';
+    if (welcomeBlock) welcomeBlock.style.display = '';
     const vocab = document.getElementById('vocabCta');
     if (vocab) vocab.style.display = '';
     if (dockSearch) dockSearch.classList.remove('has-result');
@@ -2060,7 +2150,7 @@
 
       return `
         <div class="pos-panel ${i === 0 ? 'active' : ''}" data-pos-idx="${i}">
-          ${posGroups.length === 1 ? `<div style="font-family:'Lora',serif;font-style:italic;color:var(--olive);font-size:14px;margin:16px 0 10px;">${esc(g.pos)}</div>` : ''}
+          ${posGroups.length === 1 ? `<div class="pos-label-inline">${esc(g.pos)}</div>` : ''}
           <ul class="def-list">${defsHtml}</ul>
           ${showMoreHtml}
           ${syns.length ? `
@@ -2080,20 +2170,20 @@
     resultArea.innerHTML = `
       <article class="card">
         <div class="word-head">
-          <div>
-            <h2 class="word-title">${esc(entries[0].word || word)}</h2>
-            ${phonetic ? `<div class="word-phonetic">${esc(phonetic)}</div>` : ''}
-          </div>
-          <div class="icon-row">
-            <button class="icon-btn" id="playBtn" aria-label="Play pronunciation" ${audioUrl ? '' : 'disabled'}>
-              ${ICONS.speaker}
-            </button>
-            <button class="icon-btn ${saved ? 'saved' : ''}" id="saveBtn" aria-label="Favorite word">
-              ${saved ? ICONS.bookmarkFilled : ICONS.bookmarkEmpty}
-            </button>
-            <button class="icon-btn ${bookmarked ? 'bookmarked' : ''}" id="bookmarkBtn" aria-label="Save word">
-              ${bookmarked ? ICONS.ribbonFilled : ICONS.ribbonEmpty}
-            </button>
+          <h2 class="word-title">${esc(entries[0].word || word)}</h2>
+          <div class="word-meta">
+            ${phonetic ? `<div class="word-phonetic">${esc(phonetic)}</div>` : '<span></span>'}
+            <div class="icon-row">
+              <button class="icon-btn" id="playBtn" aria-label="Play pronunciation" ${audioUrl ? '' : 'disabled'}>
+                ${ICONS.speaker}
+              </button>
+              <button class="icon-btn ${saved ? 'saved' : ''}" id="saveBtn" aria-label="Favorite word">
+                ${saved ? ICONS.bookmarkFilled : ICONS.bookmarkEmpty}
+              </button>
+              <button class="icon-btn ${bookmarked ? 'bookmarked' : ''}" id="bookmarkBtn" aria-label="Save word">
+                ${bookmarked ? ICONS.ribbonFilled : ICONS.ribbonEmpty}
+              </button>
+            </div>
           </div>
         </div>
         ${meaningsHtml}
@@ -2494,7 +2584,7 @@
             </span>
             Word of the Day
           </div>
-          <h3 class="wotd-word">${esc(data.word)}</h3>
+          <h3 class="wotd-word">${esc((data.word || '').charAt(0).toUpperCase() + (data.word || '').slice(1))}</h3>
           ${data.phonetic ? `<div class="wotd-phonetic">${esc(data.phonetic)}</div>` : ''}
           ${data.pos ? `<div class="wotd-pos">${esc(data.pos)}</div>` : ''}
           <div class="wotd-def">${esc(data.definition || '')}</div>
