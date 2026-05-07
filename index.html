@@ -42,7 +42,7 @@
     min-height: 100vh;
     line-height: 1.6;
     font-size: 17px;
-    padding-bottom: 156px;
+    padding-bottom: 96px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -93,14 +93,16 @@
   .welcome-greet {
     font-family: 'Fraunces', 'Lora', serif;
     font-weight: 600;
-    font-size: 44px;
+    font-size: 40px;
     color: var(--text);
     margin: 0;
-    line-height: 1;
+    line-height: 1.05;
     letter-spacing: -0.5px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+  }
+  .welcome-greet em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold);
   }
   .welcome-wave {
     display: inline-block;
@@ -125,7 +127,7 @@
     line-height: 1.4;
   }
 
-  /* Top bar — profile + compact Lexicon on the right */
+  /* Top bar — invisible container; just floats the menu pill */
   .top-bar {
     position: sticky;
     top: 0;
@@ -134,14 +136,174 @@
     z-index: 40;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 12px max(20px, calc((100% - 640px) / 2 + 20px));
-    margin: 0 calc(-1 * max(20px, calc((100% - 640px) / 2 + 20px)));
+    justify-content: flex-start;
+    padding: 12px 0 4px;
     gap: 12px;
-    background: var(--bg);
-    border-bottom: 1px solid rgba(45, 61, 44, 0.1);
-    box-shadow: 0 4px 16px rgba(30, 42, 30, 0.06);
+    background: transparent;
+    pointer-events: none;
   }
+  .top-bar > * { pointer-events: auto; }
+
+  .menu-btn {
+    width: 46px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.16);
+    color: var(--text-soft);
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(28px) saturate(1.9);
+    -webkit-backdrop-filter: blur(28px) saturate(1.9);
+    box-shadow:
+      0 4px 14px rgba(30, 42, 30, 0.06),
+      inset 0 1px 1px rgba(255, 255, 255, 0.5),
+      inset 0 -1px 1px rgba(30, 42, 30, 0.03);
+    transition: transform 0.15s ease, background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .menu-btn:hover { background: rgba(255, 255, 255, 0.28); }
+  .menu-btn:active { transform: scale(0.94); background: rgba(255, 255, 255, 0.4); }
+  .menu-btn svg { width: 19px; height: 19px; }
+
+  /* Top bar today-stamp — quiet date marker on the right */
+  .today-stamp {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: 'Fraunces', 'Lora', serif;
+    line-height: 1;
+    color: var(--text-soft);
+    padding: 4px 2px;
+  }
+  .today-stamp .day {
+    font-style: italic;
+    font-size: 14px;
+    color: var(--muted);
+    letter-spacing: 0.2px;
+  }
+  .today-stamp .date {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text);
+    letter-spacing: 0.2px;
+  }
+  .today-stamp .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--gold);
+    align-self: center;
+    opacity: 0.7;
+  }
+  @media (max-width: 380px) {
+    .today-stamp .day { display: none; }
+    .today-stamp .dot { display: none; }
+  }
+
+  /* Slide-in drawer + backdrop */
+  .drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 42, 30, 0.35);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 90;
+  }
+  .drawer-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(320px, 86vw);
+    background: var(--bg);
+    z-index: 100;
+    box-shadow: 8px 0 28px rgba(30, 42, 30, 0.18);
+    transform: translateX(-100%);
+    transition: transform 0.32s cubic-bezier(0.22, 0.68, 0.35, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+    gap: 8px;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 8px 8px 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+  }
+  .drawer-title { display: flex; flex-direction: column; line-height: 1; }
+  .drawer-logo {
+    font-family: 'Fraunces', 'Lora', serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--text);
+    margin: 0;
+    letter-spacing: 0.2px;
+    line-height: 1;
+  }
+  .drawer-by {
+    font-family: 'Fraunces', 'Lora', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--gold);
+    margin-top: 4px;
+  }
+  .drawer-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: var(--text-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  .drawer-close:active { transform: scale(0.92); background: var(--accent-ghost); }
+  .drawer-close svg { width: 20px; height: 20px; }
+
+  .drawer-nav { display: flex; flex-direction: column; gap: 4px; }
+  .drawer-nav .tab {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 0;
+    background: transparent;
+    color: var(--text-soft);
+    font-family: 'Inter', sans-serif;
+    font-size: 15.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  }
+  .drawer-nav .tab svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .drawer-nav .tab:active { transform: scale(0.98); }
+  .drawer-nav .tab:hover { background: var(--accent-ghost); }
+  .drawer-nav .tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .drawer-nav .tab.active svg { color: #fff; }
   .top-btn {
     width: 40px;
     height: 40px;
@@ -166,7 +328,19 @@
     align-items: center;
     gap: 8px;
     min-width: 0;
+    background: transparent;
+    border: 0;
+    padding: 4px 6px;
+    margin: -4px -6px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    transition: background 0.2s ease, transform 0.15s ease;
   }
+  .mini-masthead:active { transform: scale(0.97); background: var(--accent-ghost); }
+  .mini-masthead:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .crown-ornament-mini {
     color: var(--gold);
     flex-shrink: 0;
@@ -353,7 +527,7 @@
   /* Liquid glass search input */
   .search-input {
     width: 100%;
-    padding: 15px 56px 15px 20px;
+    padding: 15px 56px 15px 52px;
     background: rgba(255, 255, 255, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.7);
     border-radius: 999px;
@@ -386,12 +560,11 @@
   .search-input::placeholder { color: var(--muted); font-style: italic; }
 
   /* Left back button — hidden by default, shown when viewing a word */
-  .dock-search.has-result .search-input { padding-left: 54px; }
   .search-left {
     position: absolute;
     left: 6px;
     top: 50%;
-    z-index: 2;
+    z-index: 3;
     transform: translateY(-50%) scale(0.6);
     width: 40px;
     height: 40px;
@@ -414,6 +587,345 @@
     pointer-events: auto;
   }
   .search-left:active { background: rgba(255, 255, 255, 0.75); transform: translateY(-50%) scale(0.92); }
+
+  /* Mode toggle — switches between lookup and "describe a meaning" */
+  .search-mode-toggle {
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    z-index: 2;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  }
+  .search-mode-toggle svg { width: 19px; height: 19px; }
+  .search-mode-toggle:active { transform: translateY(-50%) scale(0.9); }
+  .dock-search.has-result .search-mode-toggle { opacity: 0; pointer-events: none; }
+  .dock-search.describe-mode .search-mode-toggle {
+    color: var(--gold);
+    background: var(--gold-ghost);
+  }
+  .dock-search.describe-mode .search-input::placeholder { color: var(--gold-soft); }
+  .dock-search.describe-mode .search-input:focus {
+    box-shadow:
+      0 0 0 3px var(--gold-ghost),
+      0 10px 30px rgba(30, 42, 30, 0.15),
+      inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  }
+
+  /* Meaning result — chips of suggested words */
+  .meaning-result {
+    margin-top: 24px;
+    animation: slideUp 0.4s ease;
+  }
+  .meaning-head { margin-bottom: 18px; }
+  .meaning-eyebrow {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .meaning-phrase {
+    font-family: 'Fraunces', 'Lora', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--text-soft);
+    margin: 0;
+    line-height: 1.3;
+    font-weight: 400;
+  }
+  .meaning-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .meaning-chip {
+    font-family: 'Fraunces', 'Lora', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow-sm);
+  }
+  .meaning-chip:hover { border-color: var(--accent-soft); background: #fff; }
+  .meaning-chip:active { transform: scale(0.96); background: var(--accent-ghost); }
+  .meaning-empty {
+    font-family: 'Fraunces', 'Lora', serif;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+
+  /* Describe-mode — hide home hero, keep page palette unchanged */
+  body.describe-mode .welcome-block { display: none !important; }
+
+  /* Home hero — center "A word, slowly." both vertically and horizontally */
+  .home-hero {
+    min-height: calc(100vh - 240px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 !important;
+    padding: 24px 4px;
+  }
+  .home-hero .welcome-eyebrow { margin: 0 0 14px; }
+  .home-hero .welcome-greet { font-size: 52px; line-height: 1.05; margin: 0; }
+  .home-hero .welcome-sub { max-width: 32ch; margin: 16px auto 0; }
+  @media (max-width: 480px) {
+    .home-hero .welcome-greet { font-size: 42px; }
+    .home-hero { min-height: calc(100vh - 220px); }
+  }
+
+  /* Drawer Recents block */
+  .drawer-history {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+  }
+  .drawer-history-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px 10px;
+  }
+  .drawer-history-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .drawer-history .clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    padding: 0;
+  }
+  .drawer-history .clear:hover { background: var(--accent-ghost); color: var(--accent); }
+  .drawer-history .clear svg { width: 15px; height: 15px; }
+  .drawer-history .chips { padding: 0 6px; gap: 6px; }
+  .drawer-history .chips .chip { font-size: 13px; padding: 6px 12px; }
+  .drawer-history-empty {
+    font-family: 'Fraunces', 'Lora', serif;
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--muted);
+    padding: 8px;
+  }
+
+  /* Floating Word-of-the-Day gift bubble */
+  .wotd-bubble {
+    position: fixed;
+    right: 18px;
+    bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+    z-index: 60;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: linear-gradient(135deg, #f5d49a 0%, #d4a062 60%, #b88846 100%);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow:
+      0 14px 32px rgba(184, 136, 70, 0.42),
+      0 4px 10px rgba(184, 136, 70, 0.25),
+      inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background 0.3s ease;
+    animation: bubbleFloat 4s ease-in-out infinite;
+    overflow: visible;
+  }
+  .wotd-bubble:active { transform: scale(0.92); }
+  .wotd-bubble.popping { animation: bubblePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+  .wotd-bubble.claimed {
+    background: linear-gradient(135deg, #6a8a4a 0%, #4a6a3a 100%);
+    box-shadow:
+      0 10px 26px rgba(74, 106, 58, 0.32),
+      0 3px 8px rgba(74, 106, 58, 0.18),
+      inset 0 1px 1px rgba(255, 255, 255, 0.4);
+    animation: none;
+  }
+  .wotd-bubble-glow {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 160, 98, 0.35), transparent 70%);
+    pointer-events: none;
+    animation: bubblePulse 2.6s ease-in-out infinite;
+    z-index: -1;
+  }
+  .wotd-bubble.claimed .wotd-bubble-glow { display: none; }
+  .wotd-bubble-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .wotd-bubble-icon svg { width: 26px; height: 26px; }
+  .wotd-bubble .icon-gift { opacity: 1; transform: rotate(0deg) scale(1); }
+  .wotd-bubble .icon-leaf { opacity: 0; transform: rotate(-30deg) scale(0.6); }
+  .wotd-bubble.claimed .icon-gift { opacity: 0; transform: rotate(30deg) scale(0.6); }
+  .wotd-bubble.claimed .icon-leaf { opacity: 1; transform: rotate(0deg) scale(1); }
+  @keyframes bubbleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  @keyframes bubblePulse {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 0.95; transform: scale(1.18); }
+  }
+  @keyframes bubblePop {
+    0%   { transform: scale(1); }
+    25%  { transform: scale(1.35); }
+    55%  { transform: scale(0.85); }
+    100% { transform: scale(1); }
+  }
+
+  /* WOTD popover */
+  .wotd-popover {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .wotd-popover.show { pointer-events: auto; }
+  .wotd-popover-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(30, 42, 30, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .wotd-popover.show .wotd-popover-backdrop { opacity: 1; }
+  .wotd-popover-card {
+    position: relative;
+    width: min(420px, 100%);
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.85) translateY(20px);
+    opacity: 0;
+    transition: transform 0.32s cubic-bezier(0.22, 0.68, 0.35, 1), opacity 0.3s ease;
+  }
+  .wotd-popover.show .wotd-popover-card {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  .wotd-popover-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 50%;
+    color: var(--text-soft);
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+  .wotd-popover-close:hover { background: rgba(0, 0, 0, 0.08); }
+  .wotd-popover-close svg { width: 16px; height: 16px; }
+  .wotd-popover #wotdContainer .wotd-card {
+    margin: 0;
+    border-radius: var(--radius);
+    box-shadow: none;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .experimental-note {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 4px;
+    padding: 10px 14px;
+    background: rgba(184, 136, 70, 0.12);
+    border: 1px solid rgba(184, 136, 70, 0.28);
+    border-radius: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #6a4a1f;
+    line-height: 1.4;
+    animation: slideUp 0.4s ease;
+  }
+  body.describe-mode .experimental-note { display: flex; }
+  .experimental-note .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    animation: pulseGold 1.8s ease-in-out infinite;
+  }
+  .experimental-note strong {
+    font-weight: 600;
+    color: #5a3e18;
+    margin-right: 4px;
+  }
+  @keyframes pulseGold {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(0.85); }
+  }
 
   .search-btn {
     position: absolute;
@@ -1306,15 +1818,15 @@
   /* Footer — refined signature */
   .footer {
     text-align: center;
-    margin-top: 48px;
-    padding: 24px 0 8px;
+    margin-top: 56px;
+    padding: 20px 16px 4px;
   }
   .footer-rule {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     color: var(--muted);
   }
   .footer-rule .line {
@@ -1326,18 +1838,34 @@
     font-size: 11px;
     opacity: 0.7;
   }
+  .footer-credit {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+  }
   .footer-sig {
     font-family: 'Fraunces', 'Lora', serif;
     font-style: italic;
     font-size: 14px;
     color: var(--text-soft);
-    margin-bottom: 6px;
+    line-height: 1;
   }
   .footer-sig .name {
     color: var(--text);
     font-weight: 600;
     font-style: normal;
     font-family: 'Fraunces', 'Lora', serif;
+  }
+  .footer-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--muted);
+    opacity: 0.5;
+    flex-shrink: 0;
   }
   .footer-handle {
     display: inline-flex;
@@ -1347,18 +1875,19 @@
     font-size: 12px;
     color: var(--accent);
     text-decoration: none;
-    padding: 6px 12px;
+    padding: 5px 11px;
     border-radius: 999px;
     background: var(--accent-ghost);
     transition: all 0.2s ease;
     font-weight: 500;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
+    line-height: 1;
   }
   .footer-handle:active {
     transform: scale(0.97);
     background: rgba(181,101,29,0.14);
   }
-  .footer-handle svg { width: 13px; height: 13px; }
+  .footer-handle svg { width: 12px; height: 12px; }
 
   /* Build your vocabulary CTA */
   .vocab-cta {
@@ -1571,39 +2100,79 @@
 <body>
   <div class="app">
     <div class="top-bar">
-      <div class="mini-masthead">
-        <div class="mini-title">
-          <h1 class="mini-logo">Lexicon</h1>
-          <span class="mini-by">by Harsh</span>
-        </div>
-      </div>
-      <button class="top-btn profile" id="profileBtn" aria-label="Account" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="3.4"/><path d="M5 20c1.2-3.4 4-5 7-5s5.8 1.6 7 5"/></svg>
+      <button class="top-btn menu-btn" id="menuBtn" aria-label="Menu" type="button" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="7" x2="20" y2="7"/>
+          <line x1="4" y1="12" x2="20" y2="12"/>
+          <line x1="4" y1="17" x2="20" y2="17"/>
+        </svg>
       </button>
+      <div class="today-stamp" aria-label="Today's date">
+        <span class="day" id="todayDay"></span>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="date" id="todayDate"></span>
+      </div>
     </div>
 
-    <!-- Search Panel -->
-    <section class="panel active" id="panel-search">
-      <div id="resultArea"></div>
-
-      <div class="welcome-block">
-        <h2 class="welcome-greet">Hello <span class="welcome-wave" aria-hidden="true">👋</span></h2>
+    <!-- Slide-in drawer menu -->
+    <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+    <aside class="drawer" id="drawer" aria-hidden="true" aria-label="Main menu">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <h2 class="drawer-logo">Lexicon</h2>
+          <span class="drawer-by">a quiet dictionary</span>
+        </div>
+        <button class="drawer-close" id="drawerClose" type="button" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>
-      <div id="wotdSection">
-        <div id="wotdContainer"></div>
-      </div>
+      <nav class="drawer-nav" role="tablist">
+        <button class="tab active" data-tab="search" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span>Search</span>
+        </button>
+        <button class="tab" data-tab="saved" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>Favorites</span>
+        </button>
+        <button class="tab" data-tab="bookmarks" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span>Saved</span>
+        </button>
+        <button class="tab" data-tab="account" role="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="3.4"/><path d="M5 20c1.2-3.4 4-5 7-5s5.8 1.6 7 5"/></svg>
+          <span>Account</span>
+        </button>
+      </nav>
 
-      <div id="historySection">
-        <div class="section-title">
-          <span>Recent</span>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <button class="see-all" type="button" id="seeAllHistory" style="display:none;">See all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
-            <button class="clear" id="clearHistory" type="button">Clear <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
-          </div>
+      <div id="historySection" class="drawer-history">
+        <div class="drawer-history-head">
+          <span class="drawer-history-title">Recent</span>
+          <button class="clear" id="clearHistory" type="button" aria-label="Clear recent">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+          </button>
         </div>
         <div class="chips" id="historyChips"></div>
       </div>
+    </aside>
 
+    <!-- Search Panel -->
+    <section class="panel active" id="panel-search">
+      <div class="experimental-note" id="experimentalNote" role="status">
+        <span class="dot" aria-hidden="true"></span>
+        <span><strong>Experimental.</strong> Describe a meaning in your own words and we'll suggest matching words.</span>
+      </div>
+      <div id="resultArea"></div>
+
+      <div class="welcome-block home-hero">
+        <span class="welcome-eyebrow">An epigraph</span>
+        <h2 class="welcome-greet">A word after a word after a word <em>is power</em>.</h2>
+        <p class="welcome-sub">— Margaret Atwood</p>
+      </div>
+    </section>
+
+    <!-- Account Panel -->
+    <section class="panel" id="panel-account">
       <div id="vocabCta" class="vocab-cta">
         <div class="vocab-plant-bg" aria-hidden="true"></div>
         <div class="vocab-cta-inner">
@@ -1625,6 +2194,22 @@
           </svg>
         </div>
       </div>
+
+      <footer class="footer">
+        <div class="footer-rule">
+          <span class="line"></span>
+          <span class="ornament">❦</span>
+          <span class="line"></span>
+        </div>
+        <div class="footer-credit">
+          <span class="footer-sig">crafted by <span class="name">Harsh</span></span>
+          <span class="footer-dot" aria-hidden="true"></span>
+          <a class="footer-handle" href="https://www.instagram.com/harshh__3011/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            harshh__3011
+          </a>
+        </div>
+      </footer>
     </section>
 
     <!-- Saved Panel -->
@@ -1650,23 +2235,46 @@
       </div>
       <div id="bookmarksArea"></div>
     </section>
+  </div>
 
-    <footer class="footer">
-      <div class="footer-rule">
-        <span class="line"></span>
-        <span class="ornament">❦</span>
-        <span class="line"></span>
-      </div>
-      <div class="footer-sig">crafted by <span class="name">Harsh</span></div>
-      <a class="footer-handle" href="https://www.instagram.com/harshh__3011/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-        harshh__3011
-      </a>
-    </footer>
+  <!-- Floating Word-of-the-Day gift bubble -->
+  <button class="wotd-bubble" id="wotdBubble" type="button" aria-label="Reveal Word of the Day">
+    <span class="wotd-bubble-glow" aria-hidden="true"></span>
+    <span class="wotd-bubble-icon icon-gift" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 4l1.7 4.3L18 10l-4.3 1.7L12 16l-1.7-4.3L6 10l4.3-1.7z" fill="currentColor" fill-opacity="0.25"/>
+        <path d="M19 15l.9 2.4 2.4.9-2.4.9L19 22l-.9-2.8-2.4-.9 2.4-.9z" fill="currentColor" fill-opacity="0.5"/>
+        <path d="M5 16l.6 1.6 1.6.6-1.6.6L5 21l-.6-1.6L2.8 18.8l1.6-.6z" fill="currentColor" fill-opacity="0.4"/>
+      </svg>
+    </span>
+    <span class="wotd-bubble-icon icon-leaf" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 5.5C5.5 4 8.5 4.5 12 6.5C15.5 4.5 18.5 4 22 5.5V19C18.5 17.5 15.5 18 12 20C8.5 18 5.5 17.5 2 19V5.5Z"/>
+        <path d="M12 6.5V20"/>
+      </svg>
+    </span>
+  </button>
+
+  <!-- Word-of-the-Day popover -->
+  <div class="wotd-popover" id="wotdPopover" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="wotdPopoverTitle">
+    <div class="wotd-popover-backdrop" id="wotdPopoverBackdrop"></div>
+    <div class="wotd-popover-card">
+      <button class="wotd-popover-close" id="wotdPopoverClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2 id="wotdPopoverTitle" class="visually-hidden">Word of the Day</h2>
+      <div id="wotdContainer"></div>
+    </div>
   </div>
 
   <div class="dock" id="dock">
     <form class="dock-search" id="searchForm" autocomplete="off">
+      <button class="search-mode-toggle" id="modeToggleBtn" type="button" aria-label="Describe a meaning" title="Describe a meaning" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3l1.4 4.2L17.6 8.6 13.4 10 12 14.2 10.6 10 6.4 8.6 10.6 7.2z"/>
+          <path d="M18.5 14l.7 2.1 2.1.7-2.1.7-.7 2.1-.7-2.1-2.1-.7 2.1-.7z"/>
+        </svg>
+      </button>
       <button class="search-left" id="searchBackBtn" type="button" aria-label="Back" tabindex="-1">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
@@ -1687,20 +2295,6 @@
       </button>
       <div class="suggestions" id="suggestions" role="listbox"></div>
     </form>
-    <nav class="dock-tabs" role="tablist">
-      <button class="tab active" data-tab="search" role="tab">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <span>Search</span>
-      </button>
-      <button class="tab" data-tab="saved" role="tab">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <span>Favorites</span>
-      </button>
-      <button class="tab" data-tab="bookmarks" role="tab">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        <span>Saved</span>
-      </button>
-    </nav>
   </div>
 
   <div class="cooking-overlay" id="cookingOverlay" role="dialog" aria-modal="true" aria-labelledby="cookingTitle">
@@ -1759,7 +2353,7 @@
   const resultArea = $('#resultArea');
   const historyChips = $('#historyChips');
   const historySection = $('#historySection');
-  const wotdSection = $('#wotdSection');
+  const wotdSection = null;
   const wotdContainer = $('#wotdContainer');
   const savedArea = $('#savedArea');
   const bookmarksArea = $('#bookmarksArea');
@@ -1827,35 +2421,104 @@
 
   const isBookmarked = (word) => getBookmarks().includes(word.toLowerCase().trim());
 
-  // Tabs
+  // Tabs (now inside the drawer)
   const tabOrder = ['search', 'saved', 'bookmarks'];
   let currentTab = 'search';
+  function activateTab(t) {
+    if (t === currentTab) return;
+    const fromIdx = tabOrder.indexOf(currentTab);
+    const toIdx = tabOrder.indexOf(t);
+    const dir = (toIdx === -1 || fromIdx === -1)
+      ? 'right'
+      : (toIdx > fromIdx ? 'right' : 'left');
+    currentTab = t;
+    tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === t));
+    panels.forEach(p => {
+      p.classList.remove('panel-enter', 'panel-enter-right', 'panel-enter-left');
+      const isActive = p.id === 'panel-' + t;
+      p.classList.toggle('active', isActive);
+      if (isActive) {
+        void p.offsetWidth;
+        p.classList.add(dir === 'right' ? 'panel-enter-right' : 'panel-enter-left');
+      }
+    });
+    if (t === 'saved') renderSaved();
+    if (t === 'bookmarks') renderBookmarks();
+    if (t === 'search') {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      const t = tab.dataset.tab;
-      if (t === currentTab) return;
-      const dir = tabOrder.indexOf(t) > tabOrder.indexOf(currentTab) ? 'right' : 'left';
-      currentTab = t;
-      tabs.forEach(x => {
-        x.classList.toggle('active', x === tab);
-        x.classList.remove('morph');
-      });
-      void tab.offsetWidth;
-      tab.classList.add('morph');
-      setTimeout(() => tab.classList.remove('morph'), 600);
-      panels.forEach(p => {
-        p.classList.remove('panel-enter', 'panel-enter-right', 'panel-enter-left');
-        const isActive = p.id === 'panel-' + t;
-        p.classList.toggle('active', isActive);
-        if (isActive) {
-          void p.offsetWidth;
-          p.classList.add(dir === 'right' ? 'panel-enter-right' : 'panel-enter-left');
-        }
-      });
-      if (t === 'saved') renderSaved();
-      if (t === 'bookmarks') renderBookmarks();
+      activateTab(tab.dataset.tab);
+      closeDrawer();
     });
   });
+
+  // Drawer toggle
+  const drawer = document.getElementById('drawer');
+  const drawerBackdrop = document.getElementById('drawerBackdrop');
+  const menuBtn = document.getElementById('menuBtn');
+  const drawerCloseBtn = document.getElementById('drawerClose');
+  function openDrawer() {
+    drawer.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    drawerBackdrop.classList.add('show');
+    drawerBackdrop.setAttribute('aria-hidden', 'false');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+    drawerBackdrop.classList.remove('show');
+    drawerBackdrop.setAttribute('aria-hidden', 'true');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  menuBtn.addEventListener('click', () => {
+    drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+  drawerBackdrop.addEventListener('click', closeDrawer);
+  drawerCloseBtn.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+  });
+
+  // Swipe gestures to switch between tabs (Search ↔ Favorites ↔ Saved)
+  (() => {
+    let startX = 0, startY = 0, startT = 0, tracking = false;
+    const SWIPE_MIN = 60;        // min horizontal travel
+    const SWIPE_RATIO = 1.4;     // |dx| must beat |dy| by this much
+    const SWIPE_MAX_TIME = 600;  // ms — flicks, not slow drags
+
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) { tracking = false; return; }
+      const target = e.target;
+      if (target.closest('.dock, input, textarea, .pos-tabs, .suggestions, button, a')) {
+        tracking = false; return;
+      }
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      startT = Date.now();
+      tracking = true;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if (Date.now() - startT > SWIPE_MAX_TIME) return;
+      if (Math.abs(dx) < SWIPE_MIN) return;
+      if (Math.abs(dx) < Math.abs(dy) * SWIPE_RATIO) return;
+      const idx = tabOrder.indexOf(currentTab);
+      const nextIdx = dx < 0 ? idx + 1 : idx - 1;
+      if (nextIdx < 0 || nextIdx >= tabOrder.length) return;
+      activateTab(tabOrder[nextIdx]);
+    }, { passive: true });
+  })();
 
   // Icons
   const ICONS = {
@@ -1872,14 +2535,35 @@
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]
   );
 
+  // Search modes — 'lookup' (single word) vs 'describe' (phrase → words)
+  let searchMode = 'lookup';
+  const modeToggleBtn = document.getElementById('modeToggleBtn');
+  function setSearchMode(mode) {
+    searchMode = mode;
+    const isDescribe = mode === 'describe';
+    dockSearch.classList.toggle('describe-mode', isDescribe);
+    document.body.classList.toggle('describe-mode', isDescribe);
+    searchInput.placeholder = isDescribe ? 'Describe what you mean…' : 'Look up a word…';
+    searchInput.setAttribute('autocapitalize', isDescribe ? 'sentences' : 'off');
+    hideSuggestions();
+  }
+  modeToggleBtn.addEventListener('click', () => {
+    setSearchMode(searchMode === 'lookup' ? 'describe' : 'lookup');
+    searchInput.focus();
+  });
+
   // Search
   searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const word = searchInput.value.trim();
-    if (!word) return;
+    const q = searchInput.value.trim();
+    if (!q) return;
     hideSuggestions();
     searchInput.blur();
-    lookup(word);
+    if (searchMode === 'describe') {
+      lookupByMeaning(q);
+    } else {
+      lookup(q);
+    }
   });
 
   // Autocomplete suggestions (Datamuse)
@@ -1996,27 +2680,61 @@
     }
   }
 
+  async function lookupByMeaning(phrase) {
+    const p = phrase.trim();
+    showLoading(p);
+    try {
+      const res = await fetch(`https://api.datamuse.com/words?ml=${encodeURIComponent(p)}&max=18`);
+      if (!res.ok) throw new Error('http');
+      const data = await res.json();
+      const words = (Array.isArray(data) ? data : [])
+        .map(d => ({ word: d.word, defs: d.defs || [] }))
+        .filter(d => d.word);
+      if (!words.length) return showError(p, 'notfound');
+      renderMeanings(p, words);
+    } catch (err) {
+      showError(p, 'network');
+    }
+  }
+
+  function renderMeanings(phrase, words) {
+    hideHome();
+    resultArea.innerHTML = `
+      <div class="meaning-result">
+        <div class="meaning-head">
+          <span class="meaning-eyebrow">Words for</span>
+          <h2 class="meaning-phrase">“${esc(phrase)}”</h2>
+        </div>
+        <div class="meaning-grid">
+          ${words.map(w => `<button type="button" class="meaning-chip" data-word="${esc(w.word)}">${esc(w.word)}</button>`).join('')}
+        </div>
+        <p class="meaning-empty">Tap any word to see its full entry.</p>
+      </div>
+    `;
+    resultArea.querySelectorAll('.meaning-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const w = chip.dataset.word;
+        setSearchMode('lookup');
+        searchInput.value = w;
+        lookup(w);
+      });
+    });
+  }
+
   const welcomeBlock = document.querySelector('.welcome-block');
 
   function hideHome() {
-    historySection.style.display = 'none';
-    if (wotdSection) wotdSection.style.display = 'none';
     if (welcomeBlock) welcomeBlock.style.display = 'none';
-    const vocab = document.getElementById('vocabCta');
-    if (vocab) vocab.style.display = 'none';
     if (dockSearch) dockSearch.classList.add('has-result');
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
   function showHome() {
-    historySection.style.display = '';
-    if (wotdSection) wotdSection.style.display = '';
     if (welcomeBlock) welcomeBlock.style.display = '';
-    const vocab = document.getElementById('vocabCta');
-    if (vocab) vocab.style.display = '';
     if (dockSearch) dockSearch.classList.remove('has-result');
     resultArea.innerHTML = '';
     searchInput.value = '';
+    setSearchMode('lookup');
     hideSuggestions && hideSuggestions();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -2595,6 +3313,7 @@
     const card = wotdContainer.querySelector('.wotd-card');
     if (card) {
       card.addEventListener('click', () => {
+        closeWotdPopover();
         searchInput.value = data.word;
         lookup(data.word);
       });
@@ -2839,7 +3558,8 @@
       }
     }
   }
-  document.getElementById('seeAllHistory').addEventListener('click', () => {
+  const seeAllHistoryBtn = document.getElementById('seeAllHistory');
+  if (seeAllHistoryBtn) seeAllHistoryBtn.addEventListener('click', () => {
     historyExpanded = !historyExpanded;
     renderHistory();
   });
@@ -2902,7 +3622,6 @@
     cookingOverlay.classList.remove('show');
     document.body.style.overflow = '';
   };
-  document.getElementById('profileBtn').addEventListener('click', showCooking);
   const signupBtn = document.getElementById('signupBtn');
   if (signupBtn) signupBtn.addEventListener('click', showCooking);
   const seeAllWotd = document.getElementById('seeAllWotd');
@@ -2916,11 +3635,71 @@
     if (e.key === 'Escape' && cookingOverlay.classList.contains('show')) hideCooking();
   });
 
+  // Word-of-the-Day floating bubble + popover
+  const wotdBubble = document.getElementById('wotdBubble');
+  const wotdPopover = document.getElementById('wotdPopover');
+  const wotdPopoverBackdrop = document.getElementById('wotdPopoverBackdrop');
+  const wotdPopoverClose = document.getElementById('wotdPopoverClose');
+  const WOTD_SEEN_KEY = 'lexicon.wotd.seen';
+
+  function isWotdClaimed() {
+    try {
+      const stored = localStorage.getItem(WOTD_SEEN_KEY);
+      return stored === todayKey();
+    } catch { return false; }
+  }
+  function markWotdClaimed() {
+    try { localStorage.setItem(WOTD_SEEN_KEY, todayKey()); } catch {}
+    wotdBubble.classList.add('claimed');
+    wotdBubble.setAttribute('aria-label', 'Word of the Day');
+  }
+  function openWotdPopover() {
+    wotdPopover.classList.add('show');
+    wotdPopover.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeWotdPopover() {
+    wotdPopover.classList.remove('show');
+    wotdPopover.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (isWotdClaimed()) wotdBubble.classList.add('claimed');
+
+  wotdBubble.addEventListener('click', () => {
+    const claimed = wotdBubble.classList.contains('claimed');
+    if (!claimed) {
+      wotdBubble.classList.add('popping');
+      setTimeout(() => wotdBubble.classList.remove('popping'), 600);
+    }
+    loadWotd();
+    setTimeout(() => {
+      openWotdPopover();
+      if (!claimed) markWotdClaimed();
+    }, claimed ? 0 : 280);
+  });
+  wotdPopoverBackdrop.addEventListener('click', closeWotdPopover);
+  wotdPopoverClose.addEventListener('click', closeWotdPopover);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && wotdPopover.classList.contains('show')) closeWotdPopover();
+  });
+
+  // Today stamp in the top bar
+  (() => {
+    const now = new Date();
+    const dayEl = document.getElementById('todayDay');
+    const dateEl = document.getElementById('todayDate');
+    if (dayEl) dayEl.textContent = now.toLocaleDateString(undefined, { weekday: 'long' });
+    if (dateEl) {
+      const month = now.toLocaleDateString(undefined, { month: 'short' });
+      dateEl.textContent = `${month} ${now.getDate()}`;
+    }
+  })();
+
   // Init
   renderHistory();
   renderSaved();
   renderBookmarks();
-  loadWotd();
 })();
 </script>
 </body>
